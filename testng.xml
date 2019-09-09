@@ -2,12 +2,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
   <listeners>
-    <listener class-name="resources.Listeners">
+    <listener class-name="utils.Listeners">
     </listener>
   </listeners>
   <test thread-count="5" name="Test">
     <classes>
-      <class name="appmain.signIn"/>
+      <class name="appmain.signInTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

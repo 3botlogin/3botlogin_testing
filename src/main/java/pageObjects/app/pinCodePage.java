@@ -3,7 +3,6 @@ package pageObjects.app;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.android.AndroidDriver;
-//import io.appium.java_client.AppiumDriver; u can use this instead of Ando
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;

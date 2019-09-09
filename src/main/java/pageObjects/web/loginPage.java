@@ -26,8 +26,22 @@ public class loginPage {
     @FindBy(xpath = "//div[@class=\"v-text-field__slot\"]/input")
     public WebElement nameField;
 
+    @FindBy(xpath = "//*[@id=\"app\"]/div[4]/main/div/div/section/div[1]/div/div/div/div[2]/div[1]/div/form/div[2]/div/div[1]/div/input")
+    public WebElement emailField;
+
+    //sign in and register are the same element .. same xpath
     @FindBy(xpath = "//*[@id=\"app\"]/div[2]/main/div/div/section/div[1]/div/div/form/div[2]/button")
     public WebElement _3botSignInButton;
+
+    @FindBy(xpath = "//*[@id=\"app\"]/div[2]/main/div/div/section/div[1]/div/div/form/div[2]/button")
+    public WebElement _3botRegisterButton;
+
+    @FindBy(xpath = "//*[@id=\"app\"]/div[4]/main/div/div/section/div[1]/div/div/div/div[2]/div[1]/div/form/div[4]/button")
+    public WebElement continueButton;
+
+    @FindBy(xpath = "//*[@id=\"app\"]/div[4]/main/div/div/section/div[1]/div/div/div/div[2]/div[2]/div/div[3]/div/div[1]/div/input")
+    public WebElement phraseSwitch;
+
 
     @FindBy(xpath = "//a[@id='space-menu']")
     public WebElement mySpacesMenu;

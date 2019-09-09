@@ -14,8 +14,10 @@ public class resourceAccessPage {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    @AndroidFindBy(xpath = "//android.widget.Button[@text='Ok']")
-    public WebElement OkButton;
+    //access to username and email
+    @AndroidFindBy(xpath = "//android.widget.Button[@text='Accept']")
+    public WebElement acceptButton;
+
 
 
 }

@@ -1,4 +1,4 @@
-package resources;
+package utils;
 
 import appmain.Base;
 import org.testng.ITestContext;
