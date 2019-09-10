@@ -1,13 +1,14 @@
 package appmain;
 
 import io.appium.java_client.android.Activity;
+import io.appium.java_client.android.AndroidDriver;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.*;
 import org.testng.Assert;
 import java.io.IOException;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import pageObjects.web.loginPage;
 import pageObjects.app.pinCodePage;
 import pageObjects.app.resourceAccessPage;
@@ -20,8 +21,8 @@ import javax.mail.Message;
 
 
 public class registerTests extends Base{
-    AndroidDriver<AndroidElement> appDriver;
-    AndroidDriver<AndroidElement> webDriver;
+    AppiumDriver<MobileElement> appDriver;
+    AppiumDriver<MobileElement> webDriver;
     loginPage loginPage;
     pinCodePage pinCodePage;
     resourceAccessPage resourceAccessPage;
@@ -106,7 +107,10 @@ public class registerTests extends Base{
         logger.info("Switch to the app and make sure the email is verified");
         String appPackage = (String) config.get("appPackage");
         String appActivity = (String) config.get("appActivity");
-        appDriver.startActivity(new Activity(appPackage,appActivity));
+
+        //Activity activity = new Activity(“app package goes here”, “app activity goes here”);
+        ((AndroidDriver) appDriver).startActivity(new Activity(appPackage,appActivity));
+        appDriver.context("NATIVE_APP");
         homePage.settingsButton.click();
         appDriver.navigate().back();
         homePage.settingsButton.click();

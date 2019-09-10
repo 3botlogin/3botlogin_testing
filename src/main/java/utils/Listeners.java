@@ -4,7 +4,6 @@ import appmain.Base;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
 import java.io.IOException;
 
 public class Listeners implements ITestListener {
@@ -22,7 +21,7 @@ public class Listeners implements ITestListener {
     public void onTestFailure(ITestResult result) {
         String testName = result.getName();
         try {
-            Base.takeScreenshot(testName);
+            Base.takeScreenShot(testName);
         } catch (IOException e) {
             e.printStackTrace();
         }

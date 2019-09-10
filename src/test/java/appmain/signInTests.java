@@ -1,11 +1,12 @@
 package appmain;
 
+import io.appium.java_client.AppiumDriver;
 import org.testng.SkipException;
 import org.testng.annotations.*;
 import org.testng.Assert;
 import java.io.IOException;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.MobileElement;
 import pageObjects.app.pinCodePage;
 import pageObjects.app.resourceAccessPage;
 import pageObjects.app.homePage;
@@ -15,8 +16,8 @@ import java.lang.reflect.Method;
 
 
 public class signInTests extends Base{
-    AndroidDriver<AndroidElement> appDriver;
-    AndroidDriver<AndroidElement> webDriver;
+    AppiumDriver<MobileElement> appDriver;
+    AppiumDriver<MobileElement> webDriver;
     pinCodePage pinCodePage;
     loginPage loginPage;
     resourceAccessPage resourceAccessPage;
@@ -62,10 +63,8 @@ public class signInTests extends Base{
     }
 
     @Test
-    public void test1_webSignInRegistered() throws IOException {
+    public void test1_webSignInRightPin() throws IOException {
 
-	    // this test doesn't always pass because of this issue
-        // https://github.com/3botlogin/3botlogin/issues/55
         signInThroughWebFirstSteps();
 
         logger.info("Provide username pin code and press OK, should succeed");
@@ -85,11 +84,7 @@ public class signInTests extends Base{
     }
 
     @Test
-    public void test2_webSignInRegistered() throws IOException {
-
-	    if (Boolean.TRUE) {
-            throw new SkipException("https://github.com/3botlogin/3botlogin/issues/56");
-        }
+    public void test2_webSignInWrongPin() throws IOException {
 
         signInThroughWebFirstSteps();
 
@@ -100,7 +95,7 @@ public class signInTests extends Base{
         pinCodePage.OKButton.click();
 
         logger.info("Make sure you are still in pin code page");
-        // write code here after issue is fixed
+        Assert.assertEquals(pinCodePage.loginText.getText(), "Login");
 
 
     }
@@ -108,18 +103,17 @@ public class signInTests extends Base{
     @Test
     public void test3_appSignInRegistered() throws IOException {
 
-	    if (Boolean.TRUE) {
-            throw new SkipException("https://github.com/3botlogin/3botlogin/issues/53");
+	    // pin is not needed .. if it asked for pin, return back
+	    if (pinCodePage.loginText.isDisplayed()){
+	        appDriver.navigate().back();
         }
-	    //make sure you are on registered user home page
+
 	    logger.info("Press on the FreeFlowPages window, should succeed");
 	    homePage.freeFlowWindow.click();
 
-        logger.info("Verify that you are logged in by checking if there " +
-                "is My Spaces menu, should be found" + "\n");
-        Assert.assertTrue(loginPage.mySpacesMenu.isDisplayed());
+        logger.info("Verify that the web view is displayed");
+        Assert.assertTrue(homePage.freeFlowWebView.isDisplayed());
 
     }
-
 
 }
