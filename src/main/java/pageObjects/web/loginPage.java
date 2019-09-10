@@ -4,10 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.android.AndroidDriver;
-//import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+
 
 public class loginPage {
 
@@ -45,5 +43,10 @@ public class loginPage {
 
     @FindBy(xpath = "//a[@id='space-menu']")
     public WebElement mySpacesMenu;
+
+    //when validating email
+    @FindBy(xpath = "//*[@class='subheading pt-3']")
+    public WebElement emailValidatedText;
+
 
 }

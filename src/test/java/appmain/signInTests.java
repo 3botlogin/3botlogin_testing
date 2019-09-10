@@ -22,13 +22,13 @@ public class signInTests extends Base{
     resourceAccessPage resourceAccessPage;
     homePage homePage;
     registerPage registerPage;
-    
+
 
 	@BeforeMethod
 	public void setUp(Method method) throws IOException {
 		logger.info("Running Test : " + method.getName());
 		appiumService = startServer();
-        appDriver = Capabilities(Boolean.TRUE);
+        appDriver = Capabilities(Boolean.TRUE, Boolean.TRUE);
         pinCodePage = new pinCodePage(appDriver);
         resourceAccessPage = new resourceAccessPage(appDriver);
         registerPage = new registerPage(appDriver);
@@ -45,7 +45,7 @@ public class signInTests extends Base{
 
         String website = (String) config.get("website");
         logger.info("Get Website: " + website);
-        webDriver = Capabilities(Boolean.FALSE);
+        webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
         loginPage = new loginPage(webDriver);
         webDriver.get(website);
 

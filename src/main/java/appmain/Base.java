@@ -52,7 +52,10 @@ public class Base {
 		config.load(file);
 	}
 
-	public static AndroidDriver<AndroidElement> Capabilities(Boolean app) throws MalformedURLException, IOException {
+	public static AndroidDriver<AndroidElement> Capabilities(Boolean app, Boolean noReset) throws IOException {
+		/* @param app       if True, get app capabilities .. if False, get web capabilities
+		 * @param noReset   if True, don't reset app or web
+		 */
 
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 
@@ -66,7 +69,7 @@ public class Base {
 		}
 
 		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, (String) config.get("device"));
-		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+		capabilities.setCapability(MobileCapabilityType.NO_RESET, noReset);
 		capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2"); //uiautomator2 this gives error understand why
 		capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
 		driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
@@ -128,6 +131,13 @@ public class Base {
 	public void waitAndClick(WebElement ele){
 		WebDriverWait wait = new WebDriverWait(driver, 15);
 		wait.until(ExpectedConditions.elementToBeClickable(ele));
+		ele.click();
+
+	}
+
+	public void waitTillTextBePresent(WebElement ele, String text){
+		WebDriverWait wait = new WebDriverWait(driver, 15);
+		wait.until(ExpectedConditions.textToBePresentInElement(ele, text));
 		ele.click();
 
 	}

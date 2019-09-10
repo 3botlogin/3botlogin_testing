@@ -8,6 +8,7 @@
   <test thread-count="5" name="Test">
     <classes>
       <class name="appmain.signInTests"/>
+      <class name="appmain.registerTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
