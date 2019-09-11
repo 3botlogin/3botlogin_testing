@@ -1,11 +1,9 @@
 package appmain;
 
 import io.appium.java_client.AppiumDriver;
-import org.testng.SkipException;
 import org.testng.annotations.*;
 import org.testng.Assert;
 import java.io.IOException;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.MobileElement;
 import pageObjects.app.pinCodePage;
 import pageObjects.app.resourceAccessPage;
@@ -42,7 +40,7 @@ public class signInTests extends Base{
         appiumService.stop();
 		}
 
-	public void signInThroughWebFirstSteps() throws IOException {
+	public void signInThroughWebCommonSteps() throws IOException {
 
         String website = (String) config.get("website");
         logger.info("Get Website: " + website);
@@ -65,7 +63,7 @@ public class signInTests extends Base{
     @Test
     public void test1_webSignInRightPin() throws IOException {
 
-        signInThroughWebFirstSteps();
+        signInThroughWebCommonSteps();
 
         logger.info("Provide username pin code and press OK, should succeed");
         pinCodePage.oneButton.click();
@@ -86,7 +84,7 @@ public class signInTests extends Base{
     @Test
     public void test2_webSignInWrongPin() throws IOException {
 
-        signInThroughWebFirstSteps();
+        signInThroughWebCommonSteps();
 
         logger.info("Provide wrong pin code and press OK, should fail");
         for (int i=0; i<4; i++) {
@@ -101,7 +99,7 @@ public class signInTests extends Base{
     }
 
     @Test
-    public void test3_appSignInRegistered() throws IOException {
+    public void test3_appSignIn() throws IOException {
 
 	    // pin is not needed .. if it asked for pin, return back
 	    if (pinCodePage.loginText.isDisplayed()){

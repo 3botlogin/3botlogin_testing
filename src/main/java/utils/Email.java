@@ -99,7 +99,7 @@ public class Email {
         return indices;
     }
 
-    public void waitForNewMessage(int currentMessageNumber) throws MessagingException {
+    public Boolean waitForNewMessage(int currentMessageNumber) throws MessagingException {
         // will wait for a new email to come giving 30 seconds as timeout
         int i = 0;
         while (getNumberOfMessages() <= currentMessageNumber){
@@ -109,10 +109,11 @@ public class Email {
                 System.err.format("IOException: %s%n", e);
             }
             if (30 < i) {
-                break;
+                return Boolean.FALSE;
             }
             i++;
         }
+        return Boolean.TRUE;
     }
 
 }
