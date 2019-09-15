@@ -28,7 +28,6 @@ public class homePage {
         public WebElement backButton;
 
         // elements for registered user home page
-
         @FindBy(xpath = "//android.widget.Button[@text='Settings']")
         public WebElement settingsButton;
 

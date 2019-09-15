@@ -9,6 +9,7 @@
     <classes>
       <class name="appmain.signInTests"/>
       <class name="appmain.registerTests"/>
+      <class name="appmain.recoverAccountTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

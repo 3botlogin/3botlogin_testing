@@ -18,10 +18,10 @@ public class registerPage {
     public WebElement continueButton;
 
     @FindBy(className = "android.widget.EditText")
-    public WebElement doubleNameField;
-
-    @FindBy(className = "android.widget.EditText")
     public WebElement emailField;
+
+    @FindBy(xpath = "//android.view.View[contains(@text,'write')]")
+    public WebElement PhrasePageText;
 
 }
 

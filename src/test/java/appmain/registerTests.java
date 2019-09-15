@@ -4,6 +4,7 @@ import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.testng.Assert;
 import java.io.IOException;
@@ -17,6 +18,8 @@ import pageObjects.app.settingsPage;
 import pageObjects.app.registerPage;
 import java.lang.reflect.Method;
 import utils.Email;
+import utils.testsUtils;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 
@@ -30,18 +33,23 @@ public class registerTests extends Base{
     homePage homePage;
     registerPage registerPage;
     settingsPage settingsPage;
+    testsUtils testsUtils;
     Email gmail;
     String email;
+    //String randUser;
+    //String phrase;
 
     @BeforeClass
     public void registerTestsSetup() throws MessagingException {
+
         email = (String) config.get("email");
         String email_password = (String) config.get("email_password");
         gmail = new Email(email, email_password, "smtp.gmail.com", Email.EmailFolder.INBOX);
     }
 
     @BeforeMethod
-    public void setUp(Method method) throws IOException, MessagingException {
+    public void setUp(Method method) throws IOException {
+
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
@@ -50,65 +58,17 @@ public class registerTests extends Base{
         registerPage = new registerPage(appDriver);
         settingsPage = new settingsPage(appDriver);
         homePage = new homePage(appDriver);
+        testsUtils = new testsUtils(appDriver, gmail);
 
     }
 
     @AfterMethod
-    public void tearDown(Method method) {
+    public void tearDown(Method method, ITestResult result) {
         logger.info("End of Test : " + method.getName());
         appiumService.stop();
     }
 
-    public void registeringUSerCommonSteps() throws MessagingException {
-
-        logger.info("open the app and press register now");
-        homePage.registerNowButton.click();
-
-        logger.info("Provide random 3bot name then press continue, should succeed");
-        String randUser = RandomStringUtils.randomAlphanumeric(10);
-        Actions a = new Actions(appDriver);
-        a.sendKeys(randUser);
-        a.perform();
-        // 'registerPage.doubleNameField.sendKeys(randUser)'not working.have to uer actions
-        registerPage.continueButton.click();
-
-        logger.info("Provide email then press continue, should succeed");
-        registerPage.emailField.click();
-        a.sendKeys(email);
-        a.perform();
-        registerPage.continueButton.click();
-
-        logger.info("Copy phrase if needed, then click continue");
-        registerPage.continueButton.click();
-
-        logger.info("At the Finishing page, press continue ");
-        registerPage.continueButton.click();
-
-        logger.info("Check number of messages in the gmail");
-        int emails_num = gmail.getNumberOfMessages();
-
-        logger.info("Provide username pin code, confirm it then press OK, should succeed");
-        pinCodePage.oneButton.click();
-        pinCodePage.twoButton.click();
-        pinCodePage.threeButton.click();
-        pinCodePage.fourButton.click();
-        pinCodePage.OKButton.click();
-
-        pinCodePage.oneButton.click();
-        pinCodePage.twoButton.click();
-        pinCodePage.threeButton.click();
-        pinCodePage.fourButton.click();
-        pinCodePage.OKButton.click();
-
-        logger.info("Wait for the email to be received within 30 seconds");
-        Boolean email_received = gmail.waitForNewMessage(emails_num);
-        Assert.assertTrue(email_received, "Verification mail hasn't been received");
-    }
-
-    @Test
-    public void test1_registeringUser() throws Exception {
-
-        registeringUSerCommonSteps();
+    public void verifyEmail() throws Exception {
 
         logger.info("Open the email and click the verification link, email should be verified");
         Message lastEmailMessage = gmail.getLatestMessage();
@@ -117,6 +77,14 @@ public class registerTests extends Base{
         loginPage = new loginPage(webDriver);
         webDriver.get(verificationLink);
         waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
+    }
+
+    @Test
+    public void test1_registeringUser() throws Exception {
+
+        testsUtils.registeringUSerCommonSteps();
+
+        verifyEmail();
 
         logger.info("Switch to the app and make sure the email is verified");
         String appPackage = (String) config.get("appPackage");
@@ -135,7 +103,7 @@ public class registerTests extends Base{
     @Test
     public void test2_resendEmailWhileRegistering() throws Exception {
 
-        registeringUSerCommonSteps();
+        testsUtils.registeringUSerCommonSteps();
 
         logger.info("Don't verify the email");
         int emails_num = gmail.getNumberOfMessages();
@@ -153,13 +121,7 @@ public class registerTests extends Base{
         Boolean email_received = gmail.waitForNewMessage(emails_num);
         Assert.assertTrue(email_received, "Verification mail hasn't been received");
 
-        logger.info("Open the email and click the verification link, email should be verified");
-        Message lastEmailMessage = gmail.getLatestMessage();
-        String verificationLink = gmail.getURl(gmail.getMessageContent(lastEmailMessage));
-        webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
-        loginPage = new loginPage(webDriver);
-        webDriver.get(verificationLink);
-        waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
+        verifyEmail();
 
     }
 

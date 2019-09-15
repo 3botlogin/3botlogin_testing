@@ -10,6 +10,8 @@ import pageObjects.app.resourceAccessPage;
 import pageObjects.app.homePage;
 import pageObjects.app.registerPage;
 import pageObjects.web.loginPage;
+import utils.Email;
+import utils.testsUtils;
 import java.lang.reflect.Method;
 
 
@@ -21,24 +23,46 @@ public class signInTests extends Base{
     resourceAccessPage resourceAccessPage;
     homePage homePage;
     registerPage registerPage;
+    Email gmail;
+    String email;
+    testsUtils testsUtils;
 
+
+    @BeforeClass
+    public void signInSetup() throws Exception {
+        email = (String) config.get("email");
+        String email_password = (String) config.get("email_password");
+        gmail = new Email(email, email_password, "smtp.gmail.com", Email.EmailFolder.INBOX);
+        appiumService = startServer();
+        appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
+        testsUtils = new testsUtils(appDriver, gmail);
+        testsUtils.registeringUSerCommonSteps();
+        testsUtils.verifyEmail();
+        //saveconfig
+        config.setProperty("registeredUser", testsUtils.getUserName());
+        config.setProperty("accountPhrase", testsUtils.getPhrase());
+        saveConfig();
+        appiumService.stop();
+    }
 
 	@BeforeMethod
 	public void setUp(Method method) throws IOException {
+
 		logger.info("Running Test : " + method.getName());
-		appiumService = startServer();
+        appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.TRUE);
         pinCodePage = new pinCodePage(appDriver);
         resourceAccessPage = new resourceAccessPage(appDriver);
         registerPage = new registerPage(appDriver);
         homePage = new homePage(appDriver);
-		}
+    }
 	
 	@AfterMethod
 	public void tearDown(Method method) {
+
         logger.info("End of Test : " + method.getName());
         appiumService.stop();
-		}
+    }
 
 	public void signInThroughWebCommonSteps() throws IOException {
 
@@ -57,7 +81,6 @@ public class signInTests extends Base{
         logger.info("Provide 3bot name then press Sign in, should succeed");
         loginPage.nameField.sendKeys((String) config.get("registeredUser"));
         waitAndClick(loginPage._3botSignInButton);
-
     }
 
     @Test
@@ -78,7 +101,6 @@ public class signInTests extends Base{
         logger.info("Verify that you are logged in by checking if there " +
                     "is My Spaces menu, should be found" + "\n");
         Assert.assertTrue(loginPage.mySpacesMenu.isDisplayed());
-
     }
 
     @Test
@@ -113,5 +135,6 @@ public class signInTests extends Base{
         Assert.assertTrue(homePage.freeFlowWebView.isDisplayed());
 
     }
+
 
 }

@@ -2,9 +2,9 @@ package pageObjects.app;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 
@@ -15,26 +15,26 @@ public class settingsPage {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    @AndroidFindBy(className = "android.view.View")
+    @FindBy(className = "android.view.View")
     public List<WebElement> settingViewElements;
 
-    @AndroidFindBy(xpath = "//android.view.View[@text='Show Phrase']")
+    @FindBy(xpath = "//android.view.View[@text='Show Phrase']")
     public WebElement showPhrase;
 
-    @AndroidFindBy(className = "android.widget.CheckBox")
+    @FindBy(className = "android.widget.CheckBox")
     public WebElement fingerPrintCheckbox;
 
-    @AndroidFindBy(xpath = "//android.view.View[@text='Change pincode']")
+    @FindBy(xpath = "//android.view.View[@text='Change pincode']")
     public WebElement changePinCode;
 
-    @AndroidFindBy(xpath = "//android.view.View[@text='Advanced settings']")
+    @FindBy(xpath = "//android.view.View[@text='Advanced settings']")
     public WebElement advancedSettingsDropDown;
 
     //popups
-    @AndroidFindBy(xpath = "//android.view.View[@text='Email has been resent.']")
+    @FindBy(xpath = "//android.view.View[@text='Email has been resent.']")
     public WebElement emailResentText;
 
-    @AndroidFindBy(xpath = "//android.widget.Button[@text='Ok']")
+    @FindBy(xpath = "//android.widget.Button[@text='Ok']")
     public WebElement OkButton;
 
 
