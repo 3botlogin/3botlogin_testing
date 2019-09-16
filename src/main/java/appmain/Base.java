@@ -7,6 +7,7 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
@@ -148,7 +149,8 @@ public class Base {
 		ele.click();
 
 	}
-	
+
+
 	public static void sleep(int ms) {
 	    try {
 	        Thread.sleep(ms);
@@ -160,6 +162,19 @@ public class Base {
 	public static void takeScreenShot(String testName) throws IOException {
 		File scrShotFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(scrShotFile, new File(System.getProperty("user.dir") + "/" + testName + ".png"));
+	}
+
+	public static String generateStringOfWords(int wordsNumbers){
+		String s = RandomStringUtils.randomAlphanumeric(5);
+		for (int i=1; i < wordsNumbers; i++){
+			s += " ";
+			s += RandomStringUtils.randomAlphanumeric(5);
+		}
+		return s;
+	}
+
+	public static String randString(){
+		return RandomStringUtils.randomAlphanumeric(10);
 	}
 
 }

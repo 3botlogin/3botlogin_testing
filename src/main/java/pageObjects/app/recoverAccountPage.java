@@ -31,4 +31,13 @@ public class recoverAccountPage {
     @FindBy(xpath = "//android.widget.Button[@text='PASTE']")
     public WebElement pasteButton;
 
+    @FindBy(xpath = "//android.view.View[@text='Enter Valid Email']")
+    public WebElement emailFieldErrorMessage;
+
+    @FindBy(xpath = "//android.view.View[@text='Enter your Seedphrase']")
+    public WebElement phraseFieldErrorMessage;
+
+    @FindBy(xpath = "//android.view.View[@index='4']")
+    public WebElement generalErrorMessage;
+
 }

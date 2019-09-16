@@ -10,6 +10,7 @@ import static io.appium.java_client.touch.offset.ElementOption.element;
 import static java.time.Duration.ofSeconds;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -25,7 +26,6 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import utils.testsUtils;
-
 
 
 public class recoverAccountTests extends Base{
@@ -49,7 +49,7 @@ public class recoverAccountTests extends Base{
     }
 
     @BeforeMethod
-    public void setUp(Method method) throws IOException, MessagingException {
+    public void setUp(Method method) throws IOException {
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
@@ -115,6 +115,18 @@ public class recoverAccountTests extends Base{
 
     }
 
+    public void copyPastePhrase(String phrase){
+        //WebElement pf = recoverAccountPage.phraseField;
+
+        ((AndroidDriver) appDriver).setClipboardText(phrase);
+        TouchAction t = new TouchAction(appDriver);
+        t.longPress(longPressOptions().withElement(element(recoverAccountPage.phraseField)).
+                withDuration(ofSeconds(2))).release().perform();
+        Assert.assertTrue(recoverAccountPage.pasteButton.isDisplayed());
+        recoverAccountPage.pasteButton.click();
+
+    }
+
     @Test
     public void test1_recoverAccountWithRightData() throws Exception {
 
@@ -131,5 +143,90 @@ public class recoverAccountTests extends Base{
         String [] words = text.split("\n");
         String lastWord = words[words.length - 1];
         Assert.assertEquals(lastWord, "Verified");
+    }
+
+    @Test
+    public void test2_recoverAccountWithInvalidEmail() {
+
+        if (Boolean.TRUE) {
+            throw new SkipException("This test will pass when username " +
+                                    "field is removed during recovering");
+        }
+
+        logger.info("Open the app without a registered user");
+        logger.info("Press 'Recover Account', should be directed to recover account page");
+        homePage.recoverAccountButton.click();
+
+        logger.info("Leave email field empty");
+        logger.info("Press 'Recover Account', should get message saying 'Enter Valid Email'" +
+                    "and another message saying 'Please enter an email.'");
+        recoverAccountPage.recoverAccountButton.click();
+        Assert.assertTrue(recoverAccountPage.emailFieldErrorMessage.isDisplayed());
+        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+                    "Please enter an email.");
+
+        logger.info("Enter invalid email");
+        recoverAccountPage.emailField.click();
+        Actions a = new Actions(appDriver);
+        a.sendKeys(randString());
+        a.perform();
+
+        logger.info("Press 'Recover Account', should get message saying 'Enter Valid Email'" +
+                    "and another message saying 'Please enter an email.'");
+        recoverAccountPage.recoverAccountButton.click();
+        Assert.assertTrue(recoverAccountPage.emailFieldErrorMessage.isDisplayed());
+        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+                    "Please enter an email.");
+
+    }
+
+    @Test
+    public void test3_recoverAccountWithInvalidPhrase(){
+
+        logger.info("Open the app without a registered user");
+        logger.info("Press 'Recover Account', should be directed to recover account page");
+        homePage.recoverAccountButton.click();
+
+        logger.info("Enter a valid email");
+        recoverAccountPage.emailField.click();
+        Actions a = new Actions(appDriver);
+        a.sendKeys((String) config.get("email"));
+        a.perform();
+
+        logger.info("Leave email field empty");
+        logger.info("Press 'Recover Account', should get message saying 'Seed phrase is too short'" +
+                    "and another message saying 'Enter your Seedphrase'");
+        recoverAccountPage.recoverAccountButton.click();
+        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+                    "Seed phrase is too short");
+        Assert.assertTrue(recoverAccountPage.phraseFieldErrorMessage.isDisplayed());
+
+
+        logger.info("Copy, then paste user's phrase, should succeed");
+        copyPastePhrase(generateStringOfWords(2));
+        logger.info("Press 'Recover Account', should get message saying 'Seed phrase is too short'");
+        recoverAccountPage.recoverAccountButton.click();
+        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+                "Seed phrase is too short");
+
+        logger.info("Copy, then paste user's phrase, should succeed");
+        copyPastePhrase(" " + generateStringOfWords(22));
+
+        logger.info("Press 'Recover Account', should get message saying 'Invalid mnemonic'");
+        appDriver.hideKeyboard();
+        recoverAccountPage.recoverAccountButton.click();
+        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+                "Invalid mnemonic");
+
+        logger.info("Copy, then paste user's phrase, should succeed");
+        copyPastePhrase(" " + generateStringOfWords(10));
+
+        logger.info("Press 'Recover Account', should get message saying 'Seed phrase is too long'");
+        appDriver.hideKeyboard();
+        recoverAccountPage.recoverAccountButton.click();
+        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+                    "Seed phrase is too long");
+
+
     }
 }
