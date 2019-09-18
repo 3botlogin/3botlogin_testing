@@ -10,7 +10,6 @@ import pageObjects.app.resourceAccessPage;
 import pageObjects.app.homePage;
 import pageObjects.app.registerPage;
 import pageObjects.web.loginPage;
-import utils.Email;
 import utils.testsUtils;
 import java.lang.reflect.Method;
 
@@ -23,14 +22,11 @@ public class signInTests extends Base{
     resourceAccessPage resourceAccessPage;
     homePage homePage;
     registerPage registerPage;
-    String email;
     testsUtils testsUtils;
 
 
     @BeforeClass
-    public void signInSetup() throws Exception {
-        email = (String) config.get("email");
-        String email_password = (String) config.get("email_password");
+    public void signInClassSetup() throws Exception {
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
         testsUtils = new testsUtils(appDriver);

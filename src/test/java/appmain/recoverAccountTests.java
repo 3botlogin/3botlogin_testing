@@ -42,10 +42,22 @@ public class recoverAccountTests extends Base{
     String email;
 
     @BeforeClass
-    public void registerTestsSetup() throws MessagingException {
+    public void recoverAccountClassSetup() throws Exception {
         email = (String) config.get("email");
         String email_password = (String) config.get("email_password");
         gmail = new Email(email, email_password, "smtp.gmail.com", Email.EmailFolder.INBOX);
+        if (config.get("registeredUser").toString().isEmpty()){
+            appiumService = startServer();
+            appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
+            testsUtils = new testsUtils(appDriver);
+            testsUtils.registeringUSerCommonSteps();
+            testsUtils.verifyEmail();
+            //saveconfig
+            config.setProperty("registeredUser", testsUtils.getUserName());
+            config.setProperty("accountPhrase", testsUtils.getPhrase());
+            saveConfig();
+            appiumService.stop();
+        }
     }
 
     @BeforeMethod
@@ -117,7 +129,6 @@ public class recoverAccountTests extends Base{
     }
 
     public void copyPastePhrase(String phrase){
-        //WebElement pf = recoverAccountPage.phraseField;
 
         ((AndroidDriver) appDriver).setClipboardText(phrase);
         TouchAction t = new TouchAction(appDriver);

@@ -46,5 +46,11 @@ public class settingsPage {
     @FindBy(xpath = "//android.widget.Button[@text='Ok']")
     public WebElement OkButton;
 
+    @FindBy(xpath = "//android.view.View[@index='2']")
+    public WebElement phraseText;
+
+    @FindBy(xpath = "//android.widget.Button[@text='Close']")
+    public WebElement closeButton;
+
 
 }
