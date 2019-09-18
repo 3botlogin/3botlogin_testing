@@ -30,6 +30,15 @@ public class settingsPage {
     @FindBy(xpath = "//android.view.View[@text='Advanced settings']")
     public WebElement advancedSettingsDropDown;
 
+    @FindBy(xpath = "//android.view.View[@text='Remove Account From Device']")
+    public WebElement removeAccountoption;
+
+    @FindBy(xpath = "//android.widget.Button[@text='Cancel']")
+    public WebElement cancelButton;
+
+    @FindBy(xpath = "//android.widget.Button[@text='Yes']")
+    public WebElement yesButton;
+
     //popups
     @FindBy(xpath = "//android.view.View[@text='Email has been resent.']")
     public WebElement emailResentText;

@@ -10,6 +10,7 @@
       <class name="appmain.signInTests"/>
       <class name="appmain.registerTests"/>
       <class name="appmain.recoverAccountTests"/>
+      <class name="appmain.settingsTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
