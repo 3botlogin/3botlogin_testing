@@ -14,6 +14,7 @@ import pageObjects.web.loginPage;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
+import utils.Email;
 
 
 public class testsUtils extends Base {
@@ -29,9 +30,10 @@ public class testsUtils extends Base {
     private String userName;
     private String phrase;
 
-    public testsUtils(AppiumDriver<MobileElement> appDriver, Email gmail) {
+    public testsUtils(AppiumDriver<MobileElement> appDriver) throws MessagingException {
         this.appDriver = appDriver;
-        this.gmail = gmail;
+        gmail = new Email((String) config.get("email"), (String) config.get("email_password"),
+                    "smtp.gmail.com", Email.EmailFolder.INBOX);
         pinCodePage = new pinCodePage(appDriver);
         homePage = new homePage(appDriver);
         recoverAccountPage = new recoverAccountPage(appDriver);
@@ -69,7 +71,8 @@ public class testsUtils extends Base {
         logger.info("Check number of messages in the gmail");
         int emails_num = gmail.getNumberOfMessages();
 
-        enterAndConfirmPinCode();
+        enterRightPinCode();
+        confirmRightPin();
 
         logger.info("Wait for the email to be received within 30 seconds");
         Boolean email_received = gmail.waitForNewMessage(emails_num);
@@ -77,15 +80,19 @@ public class testsUtils extends Base {
 
     }
 
-    public void enterAndConfirmPinCode(){
+    public void enterRightPinCode(){
 
-        logger.info("Provide username pin code, confirm it then press OK, should succeed");
+        logger.info("Provide username right pin code, should succeed");
         pinCodePage.oneButton.click();
         pinCodePage.twoButton.click();
         pinCodePage.threeButton.click();
         pinCodePage.fourButton.click();
         pinCodePage.OKButton.click();
+    }
 
+    public void confirmRightPin(){
+
+        logger.info("Confirm right pincode, then press OK, should succeed");
         pinCodePage.oneButton.click();
         pinCodePage.twoButton.click();
         pinCodePage.threeButton.click();

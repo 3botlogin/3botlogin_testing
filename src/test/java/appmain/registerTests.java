@@ -36,8 +36,7 @@ public class registerTests extends Base{
     testsUtils testsUtils;
     Email gmail;
     String email;
-    //String randUser;
-    //String phrase;
+
 
     @BeforeClass
     public void registerTestsSetup() throws MessagingException {
@@ -48,7 +47,7 @@ public class registerTests extends Base{
     }
 
     @BeforeMethod
-    public void setUp(Method method) throws IOException {
+    public void setUp(Method method) throws IOException, MessagingException {
 
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
@@ -58,7 +57,7 @@ public class registerTests extends Base{
         registerPage = new registerPage(appDriver);
         settingsPage = new settingsPage(appDriver);
         homePage = new homePage(appDriver);
-        testsUtils = new testsUtils(appDriver, gmail);
+        testsUtils = new testsUtils(appDriver);
 
     }
 

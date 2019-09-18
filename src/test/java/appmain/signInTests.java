@@ -23,7 +23,6 @@ public class signInTests extends Base{
     resourceAccessPage resourceAccessPage;
     homePage homePage;
     registerPage registerPage;
-    Email gmail;
     String email;
     testsUtils testsUtils;
 
@@ -32,10 +31,9 @@ public class signInTests extends Base{
     public void signInSetup() throws Exception {
         email = (String) config.get("email");
         String email_password = (String) config.get("email_password");
-        gmail = new Email(email, email_password, "smtp.gmail.com", Email.EmailFolder.INBOX);
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
-        testsUtils = new testsUtils(appDriver, gmail);
+        testsUtils = new testsUtils(appDriver);
         testsUtils.registeringUSerCommonSteps();
         testsUtils.verifyEmail();
         //saveconfig

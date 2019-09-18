@@ -49,7 +49,7 @@ public class recoverAccountTests extends Base{
     }
 
     @BeforeMethod
-    public void setUp(Method method) throws IOException {
+    public void setUp(Method method) throws IOException, MessagingException {
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
@@ -57,7 +57,7 @@ public class recoverAccountTests extends Base{
         homePage = new homePage(appDriver);
         settingsPage = new settingsPage(appDriver);
         recoverAccountPage = new recoverAccountPage(appDriver);
-        testsUtils = new testsUtils(appDriver, gmail);
+        testsUtils = new testsUtils(appDriver);
 
     }
 
@@ -99,7 +99,8 @@ public class recoverAccountTests extends Base{
 
         logger.info("Enter the pin and confirm it");
         int emails_num = gmail.getNumberOfMessages();
-        testsUtils.enterAndConfirmPinCode();
+        testsUtils.enterRightPinCode();
+        testsUtils.confirmRightPin();
 
         logger.info("Wait for the email to be received within 30 seconds");
         Boolean email_received = gmail.waitForNewMessage(emails_num);

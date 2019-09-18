@@ -47,4 +47,19 @@ public class pinCodePage {
     @FindBy(xpath = "//android.widget.Button[@text='OK']")
     public WebElement OKButton;
 
+    //changing pin elements
+    @FindBy(xpath = "//android.view.View[@text='Enter old pincode']")
+    public WebElement enterOldPinText;
+
+    @FindBy(xpath = "//android.view.View[@text='Enter new pincode']")
+    public WebElement enterNewPinText;
+
+    @FindBy(xpath = "//android.view.View[@text='Confirm new pincode']")
+    public WebElement confirmNewPinText;
+
+    @FindBy(xpath = "//android.view.View[@text='You have successfully changed you pincode']")
+    public WebElement pinChangedSuccessfullyText;
+
+
+
 }
