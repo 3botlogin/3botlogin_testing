@@ -173,5 +173,57 @@ public class settingsTests extends Base{
         Assert.assertEquals(version[0], "Version:");
     }
 
+    @Test
+    public void test4_enableAndDisableFingerPrint(){
+
+        logger.info("Press fingerprint, then cancel, Fingerprint shouldn't be enabled");
+        homePage.settingsButton.click();
+        settingsPage.fingerPrintCheckbox.click();
+        settingsPage.cancelButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                    "false");
+
+        logger.info("Enable fingerprint, should succeed");
+        settingsPage.fingerPrintCheckbox.click();
+        settingsPage.yesButton.click();
+        settingsPage.fingerPrintCheckbox.getAttribute("checked");
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                    "true");
+
+        logger.info("Press 'show phrase' and make sure a FingerPrint authentication will be required");
+        settingsPage.showPhrase.click();
+        Assert.assertTrue(settingsPage.fingerPrintMessage.isDisplayed());
+        settingsPage.fingerPrintCancelButton.click();
+        settingsPage.cancelButton.click();
+
+        logger.info("Disable Fingerprint with providing wrong pin, Fingerprint should be still enabled");
+        settingsPage.fingerPrintCheckbox.click();
+        for (int i=0; i<4; i++) {
+            pinCodePage.eightButton.click();
+        }
+        pinCodePage.OKButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "true");
+
+        logger.info("Disable Fingerprint with providing correct pin, " +
+                    "then press cancel, Fingerprint should be still enabled");
+        settingsPage.fingerPrintCheckbox.click();
+        testsUtils.enterRightPinCode();
+        settingsPage.cancelButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "true");
+
+
+        logger.info("Disable Fingerprint with providing correct pin, " +
+                    "then press yes, Fingerprint should disabled");
+        settingsPage.fingerPrintCheckbox.click();
+        testsUtils.enterRightPinCode();
+        settingsPage.yesButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "false");
+
+    }
+
+
 
 }

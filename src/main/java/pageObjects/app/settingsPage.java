@@ -52,5 +52,11 @@ public class settingsPage {
     @FindBy(xpath = "//android.widget.Button[@text='Close']")
     public WebElement closeButton;
 
+    @FindBy(xpath = "//android.widget.TextView[@text='Scan your fingerprint to authenticate']")
+    public WebElement fingerPrintMessage;
+
+    @FindBy(xpath = "//android.widget.Button[@text='CANCEL']")
+    public WebElement fingerPrintCancelButton;
+
 
 }
