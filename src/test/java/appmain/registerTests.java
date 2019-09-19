@@ -2,8 +2,6 @@ package appmain;
 
 import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.testng.Assert;

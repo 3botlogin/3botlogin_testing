@@ -3,6 +3,7 @@ package appmain;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -43,7 +44,7 @@ public class settingsTests extends Base{
 
 
     @BeforeMethod
-    public void setUp(Method method) throws IOException, MessagingException {
+    public void setUp(Method method) throws Exception {
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.TRUE);
@@ -53,30 +54,15 @@ public class settingsTests extends Base{
         testsUtils = new testsUtils(appDriver);
     }
 
-    @Test
-    public void test1_removeAccount(){
+    @AfterMethod
+    public void tearDown(Method method) {
 
-        logger.info("Go to settings page");
-        homePage.settingsButton.click();
-
-        logger.info("Press Advanced settings option then click on " +
-                    "'remove account option', should succeed");
-        settingsPage.advancedSettingsDropDown.click();
-        settingsPage.removeAccountoption.click();
-
-        logger.info("Press 'Cancel' button, should be redirected back to setting page");
-        settingsPage.cancelButton.click();
-        Assert.assertTrue(settingsPage.changePinCode.isDisplayed());
-
-        logger.info("Click on 'remove account option', then Press 'Yes' button," +
-                    " should be redirected back to home page");
-        settingsPage.removeAccountoption.click();
-        settingsPage.yesButton.click();
-        Assert.assertTrue(homePage.registerNowButton.isDisplayed());
+        logger.info("End of Test : " + method.getName());
+        appiumService.stop();
     }
 
     @Test
-    public void test2_changePinCode(){
+    public void test1_changePinCode(){
 
         logger.info("Go to settings page");
         homePage.settingsButton.click();
@@ -135,6 +121,56 @@ public class settingsTests extends Base{
     }
 
     @Test
+    public void test2_enableAndDisableFingerPrint(){
+
+        logger.info("Press fingerprint, then cancel, Fingerprint shouldn't be enabled");
+        homePage.settingsButton.click();
+        settingsPage.fingerPrintCheckbox.click();
+        settingsPage.cancelButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "false");
+
+        logger.info("Enable fingerprint, should succeed");
+        settingsPage.fingerPrintCheckbox.click();
+        settingsPage.yesButton.click();
+        settingsPage.fingerPrintCheckbox.getAttribute("checked");
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                    "true");
+
+        logger.info("Press 'show phrase' and make sure a FingerPrint authentication will be required");
+        settingsPage.showPhrase.click();
+        Assert.assertTrue(settingsPage.fingerPrintMessage.isDisplayed());
+        settingsPage.fingerPrintCancelButton.click();
+        settingsPage.cancelButton.click();
+
+        logger.info("Disable Fingerprint with providing wrong pin, Fingerprint should be still enabled");
+        settingsPage.fingerPrintCheckbox.click();
+        for (int i=0; i<4; i++) {
+            pinCodePage.eightButton.click();
+        }
+        pinCodePage.OKButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "true");
+
+        logger.info("Disable Fingerprint with providing correct pin, " +
+                "then press cancel, Fingerprint should be still enabled");
+        settingsPage.fingerPrintCheckbox.click();
+        testsUtils.enterRightPinCode();
+        settingsPage.cancelButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "true");
+
+        logger.info("Disable Fingerprint with providing correct pin, " +
+                "then press yes, Fingerprint should disabled");
+        settingsPage.fingerPrintCheckbox.click();
+        testsUtils.enterRightPinCode();
+        settingsPage.yesButton.click();
+        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
+                "false");
+
+    }
+
+    @Test
     public void test3_checkOnSettingsPageElements(){
 
         logger.info("Go to settings page");
@@ -173,55 +209,30 @@ public class settingsTests extends Base{
         Assert.assertEquals(version[0], "Version:");
     }
 
+
     @Test
-    public void test4_enableAndDisableFingerPrint(){
+    public void test4_removeAccount() throws IOException {
 
-        logger.info("Press fingerprint, then cancel, Fingerprint shouldn't be enabled");
+        logger.info("Go to settings page");
         homePage.settingsButton.click();
-        settingsPage.fingerPrintCheckbox.click();
-        settingsPage.cancelButton.click();
-        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
-                    "false");
 
-        logger.info("Enable fingerprint, should succeed");
-        settingsPage.fingerPrintCheckbox.click();
+        logger.info("Press Advanced settings option then click on " +
+                "'remove account option', should succeed");
+        settingsPage.advancedSettingsDropDown.click();
+        settingsPage.removeAccountoption.click();
+
+        logger.info("Press 'Cancel' button, should be redirected back to setting page");
+        settingsPage.cancelButton.click();
+        Assert.assertTrue(settingsPage.changePinCode.isDisplayed());
+
+        logger.info("Click on 'remove account option', then Press 'Yes' button," +
+                " should be redirected back to home page");
+        settingsPage.removeAccountoption.click();
         settingsPage.yesButton.click();
-        settingsPage.fingerPrintCheckbox.getAttribute("checked");
-        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
-                    "true");
+        Assert.assertTrue(homePage.registerNowButton.isDisplayed());
 
-        logger.info("Press 'show phrase' and make sure a FingerPrint authentication will be required");
-        settingsPage.showPhrase.click();
-        Assert.assertTrue(settingsPage.fingerPrintMessage.isDisplayed());
-        settingsPage.fingerPrintCancelButton.click();
-        settingsPage.cancelButton.click();
-
-        logger.info("Disable Fingerprint with providing wrong pin, Fingerprint should be still enabled");
-        settingsPage.fingerPrintCheckbox.click();
-        for (int i=0; i<4; i++) {
-            pinCodePage.eightButton.click();
-        }
-        pinCodePage.OKButton.click();
-        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
-                "true");
-
-        logger.info("Disable Fingerprint with providing correct pin, " +
-                    "then press cancel, Fingerprint should be still enabled");
-        settingsPage.fingerPrintCheckbox.click();
-        testsUtils.enterRightPinCode();
-        settingsPage.cancelButton.click();
-        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
-                "true");
-
-
-        logger.info("Disable Fingerprint with providing correct pin, " +
-                    "then press yes, Fingerprint should disabled");
-        settingsPage.fingerPrintCheckbox.click();
-        testsUtils.enterRightPinCode();
-        settingsPage.yesButton.click();
-        Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
-                "false");
-
+        config.setProperty("registeredUser", "");
+        saveConfig();
     }
 
 
