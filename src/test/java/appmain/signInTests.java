@@ -69,20 +69,21 @@ public class signInTests extends Base{
         logger.info("Click Sign in/up button, should succeed");
         loginPage.signInButton.click();
 
-        logger.info("Click 3bot Login option, should succeed");
+        logger.info("Choose 3bot Login option, should succeed");
         loginPage._3botLoginOption.click();
 
-        logger.info("Provide 3bot name then press Sign in, should succeed");
+        logger.info("Provide 3bot name then press Sign in, should be redirected to the app");
         loginPage.nameField.sendKeys((String) config.get("registeredUser"));
         waitAndClick(loginPage._3botSignInButton);
     }
 
     @Test
     public void test1_webSignInRightPin() throws IOException {
+        // TBL-003
 
         signInThroughWebCommonSteps();
 
-        logger.info("Provide username pin code and press OK, should succeed");
+        logger.info("Provide username correct pin code and press OK, should succeed");
         pinCodePage.oneButton.click();
         pinCodePage.twoButton.click();
         pinCodePage.threeButton.click();
@@ -92,17 +93,18 @@ public class signInTests extends Base{
         logger.info("Press Accept for the website to access the app , should succeed");
         resourceAccessPage.acceptButton.click();
 
-        logger.info("Verify that you are logged in by checking if there " +
+        logger.info("Verify if the user is logged in by checking if there " +
                     "is My Spaces menu, should be found" + "\n");
         Assert.assertTrue(loginPage.mySpacesMenu.isDisplayed());
     }
 
     @Test
     public void test2_webSignInWrongPin() throws IOException {
+        // TBL-004
 
         signInThroughWebCommonSteps();
 
-        logger.info("Provide wrong pin code and press OK, should fail");
+        logger.info("Provide wrong pin code and press OK, Sign in should fail");
         for (int i=0; i<4; i++) {
             pinCodePage.nineButton.click();
         }
@@ -116,6 +118,7 @@ public class signInTests extends Base{
 
     @Test
     public void test3_appSignIn() throws IOException {
+        // TBL-005
 
 	    // pin is not needed .. if it asked for pin, return back
 	    if (pinCodePage.loginText.isDisplayed()){
@@ -125,7 +128,7 @@ public class signInTests extends Base{
 	    logger.info("Press on the FreeFlowPages window, should succeed");
 	    homePage.freeFlowWindow.click();
 
-        logger.info("Verify that the web view is displayed");
+        logger.info("Verify that the web view is displayed inside the app");
         Assert.assertTrue(homePage.freeFlowWebView.isDisplayed());
 
     }

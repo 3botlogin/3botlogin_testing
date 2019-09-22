@@ -78,6 +78,7 @@ public class registerTests extends Base{
 
     @Test
     public void test1_registeringUser() throws Exception {
+        // TBL-001
 
         testsUtils.registeringUSerCommonSteps();
 
@@ -99,15 +100,16 @@ public class registerTests extends Base{
 
     @Test
     public void test2_resendEmailWhileRegistering() throws Exception {
+        // TBL-002
 
         testsUtils.registeringUSerCommonSteps();
 
-        logger.info("Don't verify the email");
+        logger.info("Don't verify the confirmation email");
         int emails_num = gmail.getNumberOfMessages();
         appDriver.navigate().back();
 
-        logger.info("Go to app preferences and resend verification email," +
-                    " should get a message 'email has been resend'");
+        logger.info("Go to app preferences and press resend verification email," +
+                    " should get a message saying 'email has been resend'");
         homePage.settingsButton.click();
         settingsPage.settingViewElements.get(4).click();
         Assert.assertTrue(settingsPage.emailResentText.isDisplayed(),

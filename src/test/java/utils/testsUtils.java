@@ -60,7 +60,7 @@ public class testsUtils extends Base {
         a.perform();
         registerPage.continueButton.click();
 
-        logger.info("Copy phrase if needed, then click continue");
+        logger.info("Copy phrase, then click continue");
         String text = registerPage.PhrasePageText.getText();
         phrase = text.split("\n")[1];
         registerPage.continueButton.click();

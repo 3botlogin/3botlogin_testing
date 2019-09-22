@@ -11,8 +11,6 @@ import pageObjects.app.homePage;
 import pageObjects.app.pinCodePage;
 import pageObjects.app.settingsPage;
 import utils.testsUtils;
-
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -63,25 +61,23 @@ public class settingsTests extends Base{
 
     @Test
     public void test1_changePinCode(){
+        // TBL-009
 
         logger.info("Go to settings page");
         homePage.settingsButton.click();
-
-        logger.info("Press Advanced settings option then click on " +
-                    "'remove account option', should succeed");
 
         logger.info("Press 'Change pincode', should be redirected to change pincode page");
         settingsPage.changePinCode.click();
         Assert.assertTrue(pinCodePage.enterOldPinText.isDisplayed());
 
-        logger.info("Enter old wrong pin code, should still see message saying 'Enter old pincode'");
+        logger.info("Enter wrong old pin code, should still see message saying 'Enter old pincode'");
         for (int i=0; i<4; i++) {
             pinCodePage.eightButton.click();
         }
         pinCodePage.OKButton.click();
         Assert.assertTrue(pinCodePage.enterOldPinText.isDisplayed());
 
-        logger.info("Enter old right pin code, should succeed");
+        logger.info("Enter correct old pin code, should succeed");
         testsUtils.enterRightPinCode();
         Assert.assertTrue(pinCodePage.enterNewPinText.isDisplayed());
 
@@ -122,9 +118,12 @@ public class settingsTests extends Base{
 
     @Test
     public void test2_enableAndDisableFingerPrint(){
+        // TBL-010
 
-        logger.info("Press fingerprint, then cancel, Fingerprint shouldn't be enabled");
+        logger.info("Go to settings page");
         homePage.settingsButton.click();
+
+        logger.info("Press fingerprint, then cancel, Fingerprint checkbox shouldn't be enabled");
         settingsPage.fingerPrintCheckbox.click();
         settingsPage.cancelButton.click();
         Assert.assertEquals(settingsPage.fingerPrintCheckbox.getAttribute("checked"),
@@ -172,6 +171,7 @@ public class settingsTests extends Base{
 
     @Test
     public void test3_checkOnSettingsPageElements(){
+        // TBL-011
 
         logger.info("Go to settings page");
         homePage.settingsButton.click();
@@ -212,6 +212,7 @@ public class settingsTests extends Base{
 
     @Test
     public void test4_removeAccount() throws IOException {
+        // TBL-012
 
         logger.info("Go to settings page");
         homePage.settingsButton.click();
