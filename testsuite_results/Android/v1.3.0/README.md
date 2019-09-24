@@ -1,0 +1,1 @@
+- View emailable-report.html results report for running tests [here](https://3botlogin.github.io/3botlogin_testing/testsuite_results/Android/v1.3.0/emailable-report.html)
