@@ -38,7 +38,7 @@ To be able to run tests, the following softwares are required:
 
 4- Once tests execution is done. please open `3botlogin_testing/target/surefire-reports/emailable-report.html`
    to check the full report of the passed and failed tests with detailed explanation of the errors (if exists).
-   A sample can be found [here](testsuite_results/Android/v1.3.0/emailable-report.html).
+   A sample can be found [here](https://3botlogin.github.io/3botlogin_testing/testsuite_results/Android/v1.3.0/emailable-report.html).
    
 5- Logs can be found in `log/testlogs.log`. This log file will be generated during running testsuite.
 
