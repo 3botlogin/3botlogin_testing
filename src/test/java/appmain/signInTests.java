@@ -1,7 +1,7 @@
 package appmain;
 
 import io.appium.java_client.AppiumDriver;
-import org.testng.annotations.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import java.io.IOException;
 import io.appium.java_client.MobileElement;
@@ -12,6 +12,10 @@ import pageObjects.app.registerPage;
 import pageObjects.web.loginPage;
 import utils.testsUtils;
 import java.lang.reflect.Method;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 
 public class signInTests extends Base{
@@ -27,6 +31,7 @@ public class signInTests extends Base{
 
     @BeforeClass
     public void signInClassSetup() throws Exception {
+        logger.info("Sign In Class Setup");
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
         testsUtils = new testsUtils(appDriver);
@@ -94,7 +99,7 @@ public class signInTests extends Base{
         resourceAccessPage.acceptButton.click();
 
         logger.info("Verify if the user is logged in by checking if there " +
-                    "is My Spaces menu, should be found" + "\n");
+                    "is My Spaces menu, should be found");
         Assert.assertTrue(loginPage.mySpacesMenu.isDisplayed());
     }
 
@@ -120,13 +125,20 @@ public class signInTests extends Base{
     public void test3_appSignIn() throws IOException {
         // TBL-005
 
-	    // pin is not needed .. if it asked for pin, return back
-	    if (pinCodePage.loginText.isDisplayed()){
-	        appDriver.navigate().back();
+        logger.info("Press on the FreeFlowPages window, should succeed");
+        try{
+            homePage.freeFlowWindow.click();
+        }
+        catch (NoSuchElementException e) {
+            appDriver.navigate().back();
+            homePage.freeFlowWindow.click();
         }
 
-	    logger.info("Press on the FreeFlowPages window, should succeed");
-	    homePage.freeFlowWindow.click();
+        // if permission question exists, press allow
+        try {
+            homePage.permissionAllow.click();
+        }
+        catch (NoSuchElementException e) {}
 
         logger.info("Verify that the web view is displayed inside the app");
         Assert.assertTrue(homePage.freeFlowWebView.isDisplayed());

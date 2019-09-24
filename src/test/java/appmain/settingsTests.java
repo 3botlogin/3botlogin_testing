@@ -26,6 +26,7 @@ public class settingsTests extends Base{
 
     @BeforeClass
     public void settingsClassSetup() throws Exception {
+        logger.info("Settings Class Setup");
         if (config.get("registeredUser").toString().isEmpty()){
             appiumService = startServer();
             appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);

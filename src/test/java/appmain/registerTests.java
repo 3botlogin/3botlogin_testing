@@ -37,8 +37,8 @@ public class registerTests extends Base{
 
 
     @BeforeClass
-    public void registerTestsSetup() throws MessagingException {
-
+    public void registerTestsClassSetup() throws MessagingException {
+        logger.info("Register Class Setup");
         email = (String) config.get("email");
         String email_password = (String) config.get("email_password");
         gmail = new Email(email, email_password, "smtp.gmail.com", Email.EmailFolder.INBOX);
@@ -60,9 +60,18 @@ public class registerTests extends Base{
     }
 
     @AfterMethod
-    public void tearDown(Method method, ITestResult result) {
+    public void tearDown(Method method) {
         logger.info("End of Test : " + method.getName());
         appiumService.stop();
+    }
+
+    @AfterClass
+    public void registerTestsClassTeardown() throws IOException {
+        //saveconfig to make sure it
+        logger.info("Register Class tearDown");
+        config.setProperty("registeredUser", "");
+        config.setProperty("accountPhrase", "");
+        saveConfig();
     }
 
     public void verifyEmail() throws Exception {

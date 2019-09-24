@@ -7,10 +7,10 @@
   </listeners>
   <test thread-count="5" name="Test">
     <classes>
-      <class name="appmain.registerTests"/>
       <class name="appmain.signInTests"/>
-      <class name="appmain.recoverAccountTests"/>
+      <class name="appmain.registerTests"/>
       <class name="appmain.settingsTests"/>
+      <class name="appmain.recoverAccountTests"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

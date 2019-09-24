@@ -11,10 +11,7 @@ import static java.time.Duration.ofSeconds;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.SkipException;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pageObjects.app.settingsPage;
 import pageObjects.web.loginPage;
 import utils.Email;
@@ -43,6 +40,7 @@ public class recoverAccountTests extends Base{
 
     @BeforeClass
     public void recoverAccountClassSetup() throws Exception {
+        logger.info("Recover Account Class Setup");
         email = (String) config.get("email");
         String email_password = (String) config.get("email_password");
         gmail = new Email(email, email_password, "smtp.gmail.com", Email.EmailFolder.INBOX);
@@ -78,6 +76,15 @@ public class recoverAccountTests extends Base{
     public void tearDown(Method method) {
         logger.info("End of Test : " + method.getName());
         appiumService.stop();
+    }
+
+    @AfterClass
+    public void recoverAccountClassTearDown() throws IOException {
+        //saveconfig to make sure it
+        logger.info("Recover Account Class tearDown");
+        config.setProperty("registeredUser", "");
+        config.setProperty("accountPhrase", "");
+        saveConfig();
     }
 
     public void copyPastePhrase(String phrase){

@@ -54,6 +54,8 @@ public class Base {
 	}
 
 	public void saveConfig() throws IOException {
+		File globalPropDir = new File("src");
+		globalPropFile = new File(globalPropDir, "global.properties");
 		OutputStream output = new FileOutputStream(globalPropFile.getAbsolutePath());
 		config.store(output, null);
 	}
@@ -71,8 +73,6 @@ public class Base {
 		}
 		else {
 			capabilities.setCapability(MobileCapabilityType.BROWSER_NAME,"Chrome");
-
-
 
 		}
 
@@ -157,11 +157,6 @@ public class Base {
 	    } catch (InterruptedException e) {
 	        System.err.format("IOException: %s%n", e);
 	    }
-	}
-
-	public static void takeScreenShot(String testName) throws IOException {
-		File scrShotFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(scrShotFile, new File(System.getProperty("user.dir") + "/" + testName + ".png"));
 	}
 
 	public static String generateStringOfWords(int wordsNumbers){

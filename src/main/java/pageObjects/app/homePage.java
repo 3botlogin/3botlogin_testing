@@ -38,6 +38,10 @@ public class homePage {
         @FindBy(className = "android.webkit.WebView")
         public WebElement freeFlowWebView;
 
+        //elements for ffp
+
+        @FindBy(xpath = "//android.widget.Button[@text='ALLOW']")
+        public WebElement permissionAllow;
 
 }
 
