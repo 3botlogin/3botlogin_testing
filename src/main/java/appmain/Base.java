@@ -1,5 +1,6 @@
 package appmain;
 
+import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.AppiumDriver;
@@ -136,7 +137,7 @@ public class Base {
 		return isServerRunning;
 		}
 
-	public void waitAndClick(WebElement ele){
+	public static void waitAndClick(WebElement ele){
 		WebDriverWait wait = new WebDriverWait(driver, 15);
 		wait.until(ExpectedConditions.elementToBeClickable(ele));
 		ele.click();
@@ -170,6 +171,12 @@ public class Base {
 
 	public static String randString(){
 		return RandomStringUtils.randomAlphanumeric(10);
+	}
+
+	public static void switchToApp(AppiumDriver<MobileElement> appDriver){
+		String appPackage = (String) config.get("appPackage");
+		String appActivity = (String) config.get("appActivity");
+		((AndroidDriver) appDriver).startActivity(new Activity(appPackage,appActivity));
 	}
 
 }

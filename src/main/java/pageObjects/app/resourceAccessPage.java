@@ -16,8 +16,11 @@ public class resourceAccessPage {
 
     //access to username and email
     @AndroidFindBy(xpath = "//android.widget.Button[@text='Accept']")
-    public WebElement acceptButton;
+    private WebElement acceptButton;
 
+    public void clickAccept(){
+        acceptButton.click();
+    }
 
 
 }

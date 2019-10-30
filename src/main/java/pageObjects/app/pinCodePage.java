@@ -1,6 +1,7 @@
 package pageObjects.app;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -9,57 +10,77 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
 public class pinCodePage {
 
+    private AppiumDriver<MobileElement> driver;
+
     public pinCodePage(AppiumDriver<MobileElement> driver)
     {
+        this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
     @FindBy(xpath = "//android.view.View[@text='Login']")
-    public WebElement loginText;
-
-    @FindBy(xpath = "//android.widget.Button[@text='1']")
-    public WebElement oneButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='2']")
-    public WebElement twoButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='3']")
-    public WebElement threeButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='4']")
-    public WebElement fourButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='5']")
-    public WebElement fiveButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='6']")
-    public WebElement sixButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='7']")
-    public WebElement sevenButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='8']")
-    public WebElement eightButton;
-
-    @FindBy(xpath = "//android.widget.Button[@text='9']")
-    public WebElement nineButton;
+    private WebElement loginText;
 
     @FindBy(xpath = "//android.widget.Button[@text='OK']")
-    public WebElement OKButton;
+    private WebElement OKButton;
+
 
     //changing pin elements
     @FindBy(xpath = "//android.view.View[@text='Enter old pincode']")
-    public WebElement enterOldPinText;
+    private WebElement enterOldPinText;
 
     @FindBy(xpath = "//android.view.View[@text='Enter new pincode']")
-    public WebElement enterNewPinText;
+    private WebElement enterNewPinText;
 
     @FindBy(xpath = "//android.view.View[@text='Confirm new pincode']")
-    public WebElement confirmNewPinText;
+    private WebElement confirmNewPinText;
 
     @FindBy(xpath = "//android.view.View[@text='You have successfully changed you pincode']")
-    public WebElement pinChangedSuccessfullyText;
+    private WebElement pinChangedSuccessfullyText;
 
 
+    public void clickNumber(String num){
+        driver.findElement(By.xpath("//android.widget.Button[@text=" + num + "]")).click();
+    }
 
+
+    public resourceAccessPage clickOkButton(){
+        OKButton.click();
+        return new resourceAccessPage(driver);
+
+    }
+
+    public String getLoginText(){
+        return loginText.getText();
+    }
+
+    public Boolean checkEnterOldPinTextDisplayed(){
+        return enterOldPinText.isDisplayed();
+    }
+
+    public Boolean checkEnterNewPinTextDisplayed(){
+        return enterNewPinText.isDisplayed();
+    }
+
+    public Boolean checkConfirmNewPinTextDisplayed(){
+        return confirmNewPinText.isDisplayed();
+    }
+
+    public Boolean checkPinChangedSuccessfullyTextDisplayed(){
+        return confirmNewPinText.isDisplayed();
+    }
+
+    public resourceAccessPage enterRightPinCode(){
+
+        clickNumber("1");
+        clickNumber("2");
+        clickNumber("3");
+        clickNumber("4");
+        return clickOkButton();
+    }
+
+    public void confirmRightPin(){
+
+        enterRightPinCode();
+    }
 }

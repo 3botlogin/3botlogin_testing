@@ -8,14 +8,10 @@ import io.appium.java_client.MobileElement;
 import pageObjects.app.pinCodePage;
 import pageObjects.app.resourceAccessPage;
 import pageObjects.app.homePage;
-import pageObjects.app.registerPage;
 import pageObjects.web.loginPage;
 import utils.testsUtils;
 import java.lang.reflect.Method;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 
 public class signInTests extends Base{
@@ -23,9 +19,7 @@ public class signInTests extends Base{
     AppiumDriver<MobileElement> webDriver;
     pinCodePage pinCodePage;
     loginPage loginPage;
-    resourceAccessPage resourceAccessPage;
     homePage homePage;
-    registerPage registerPage;
     testsUtils testsUtils;
 
 
@@ -51,8 +45,6 @@ public class signInTests extends Base{
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.TRUE);
         pinCodePage = new pinCodePage(appDriver);
-        resourceAccessPage = new resourceAccessPage(appDriver);
-        registerPage = new registerPage(appDriver);
         homePage = new homePage(appDriver);
     }
 	
@@ -72,14 +64,14 @@ public class signInTests extends Base{
         webDriver.get(website);
 
         logger.info("Click Sign in/up button, should succeed");
-        loginPage.signInButton.click();
+        loginPage.clickSignInButton();
 
         logger.info("Choose 3bot Login option, should succeed");
-        loginPage._3botLoginOption.click();
+        loginPage.clickthreebotLoginOption();
 
         logger.info("Provide 3bot name then press Sign in, should be redirected to the app");
-        loginPage.nameField.sendKeys((String) config.get("registeredUser"));
-        waitAndClick(loginPage._3botSignInButton);
+        loginPage.enter3botName((String) config.get("registeredUser"));
+        loginPage.click3botSignInButton();
     }
 
     @Test
@@ -89,18 +81,14 @@ public class signInTests extends Base{
         signInThroughWebCommonSteps();
 
         logger.info("Provide username correct pin code and press OK, should succeed");
-        pinCodePage.oneButton.click();
-        pinCodePage.twoButton.click();
-        pinCodePage.threeButton.click();
-        pinCodePage.fourButton.click();
-        pinCodePage.OKButton.click();
+        resourceAccessPage resAccessPage = pinCodePage.enterRightPinCode();
 
         logger.info("Press Accept for the website to access the app , should succeed");
-        resourceAccessPage.acceptButton.click();
+        resAccessPage.clickAccept();
 
         logger.info("Verify if the user is logged in by checking if there " +
                     "is My Spaces menu, should be found");
-        Assert.assertTrue(loginPage.mySpacesMenu.isDisplayed());
+        Assert.assertTrue(loginPage.checkIfMySpaceMenuDisplayed());
     }
 
     @Test
@@ -111,12 +99,12 @@ public class signInTests extends Base{
 
         logger.info("Provide wrong pin code and press OK, Sign in should fail");
         for (int i=0; i<4; i++) {
-            pinCodePage.nineButton.click();
+            pinCodePage.clickNumber("8");
         }
-        pinCodePage.OKButton.click();
+        pinCodePage.clickOkButton();
 
         logger.info("Make sure you are still in pin code page");
-        Assert.assertEquals(pinCodePage.loginText.getText(), "Login");
+        Assert.assertEquals(pinCodePage.getLoginText(), "Login");
 
 
     }
@@ -126,22 +114,16 @@ public class signInTests extends Base{
         // TBL-005
 
         logger.info("Press on the FreeFlowPages window, should succeed");
-        try{
-            homePage.freeFlowWindow.click();
-        }
-        catch (NoSuchElementException e) {
-            appDriver.navigate().back();
-            homePage.freeFlowWindow.click();
-        }
+        homePage.clickFreeFlowWindow();
 
         // if permission question exists, press allow
         try {
-            homePage.permissionAllow.click();
+            homePage.clickPermissionAllowButton();
         }
         catch (NoSuchElementException e) {}
 
         logger.info("Verify that the web view is displayed inside the app");
-        Assert.assertTrue(homePage.freeFlowWebView.isDisplayed());
+        Assert.assertTrue(homePage.checkIfFreeFlowWebviewDisplayed());
 
     }
 

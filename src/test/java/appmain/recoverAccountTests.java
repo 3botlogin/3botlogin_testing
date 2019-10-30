@@ -29,11 +29,8 @@ public class recoverAccountTests extends Base{
 
     AppiumDriver<MobileElement> appDriver;
     AppiumDriver<MobileElement> webDriver;
-    pinCodePage pinCodePage;
     homePage homePage;
-    recoverAccountPage recoverAccountPage;
     loginPage loginPage;
-    settingsPage settingsPage;
     testsUtils testsUtils;
     Email gmail;
     String email;
@@ -64,10 +61,7 @@ public class recoverAccountTests extends Base{
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
-        pinCodePage = new pinCodePage(appDriver);
         homePage = new homePage(appDriver);
-        settingsPage = new settingsPage(appDriver);
-        recoverAccountPage = new recoverAccountPage(appDriver);
         testsUtils = new testsUtils(appDriver);
 
     }
@@ -87,53 +81,31 @@ public class recoverAccountTests extends Base{
         saveConfig();
     }
 
-    public void copyPastePhrase(String phrase){
-
-        ((AndroidDriver) appDriver).setClipboardText(phrase);
-        TouchAction t = new TouchAction(appDriver);
-        t.longPress(longPressOptions().withElement(element(recoverAccountPage.phraseField)).
-                withDuration(ofSeconds(2))).release().perform();
-        Assert.assertTrue(recoverAccountPage.pasteButton.isDisplayed());
-        recoverAccountPage.pasteButton.click();
-
-    }
-
     @Test
     public void test1_recoverAccountWithRightData() throws Exception {
         // TBL-006
 
         logger.info("Open the app without a registered user");
         logger.info("Press 'Recover Account', should be directed to recover account page");
-        homePage.recoverAccountButton.click();
+        recoverAccountPage recoverAccPage = homePage.clickRecoverAccountButton();
 
         // In the future 3botname shouldn't be required
         logger.info("Enter a valid 3botName");
-        recoverAccountPage.doubleNameField.click();
-        Actions a = new Actions(appDriver);
-        a.sendKeys((String) config.get("registeredUser"));
-        a.perform();
+        recoverAccPage.enter3botName((String) config.get("registeredUser"));
 
         logger.info("Enter user's email");
-        recoverAccountPage.emailField.click();
-        a.sendKeys((String) config.get("email"));
-        a.perform();
+        recoverAccPage.enterEmail((String) config.get("email"));
 
         logger.info("Copy, then paste correct user's phrase, should succeed");
-        String phrase = (String) config.get("accountPhrase");
-        ((AndroidDriver) appDriver).setClipboardText(phrase);
-        TouchAction t = new TouchAction(appDriver);
-        t.longPress(longPressOptions().withElement(element(recoverAccountPage.phraseField)).
-                withDuration(ofSeconds(2))).release().perform();
-        Assert.assertTrue(recoverAccountPage.pasteButton.isDisplayed());
-        recoverAccountPage.pasteButton.click();
+        recoverAccPage.copyPastePhrase((String) config.get("accountPhrase"));
 
         logger.info("Press 'Recover Account', should be redirected to pin page");
-        recoverAccountPage.recoverAccountButton.click();
+        pinCodePage pinPage = recoverAccPage.clickRecoverAccountButton();
 
         logger.info("Enter the pin and confirm it, should succeed");
         int emails_num = gmail.getNumberOfMessages();
-        testsUtils.enterRightPinCode();
-        testsUtils.confirmRightPin();
+        pinPage.enterRightPinCode();
+        pinPage.confirmRightPin();
 
         logger.info("Wait for the email to be received within 30 seconds");
         Boolean email_received = gmail.waitForNewMessage(emails_num);
@@ -148,16 +120,11 @@ public class recoverAccountTests extends Base{
         waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
 
         logger.info("Switch to the app and make sure the email is verified");
-        String appPackage = (String) config.get("appPackage");
-        String appActivity = (String) config.get("appActivity");
-        ((AndroidDriver) appDriver).startActivity(new Activity(appPackage,appActivity));
-        homePage.settingsButton.click();
+        switchToApp(appDriver);
+        homePage.clickSettingButton();
         appDriver.navigate().back();
-        homePage.settingsButton.click();
-        String text = settingsPage.settingViewElements.get(4).getText();
-        String [] words = text.split("\n");
-        String lastWord = words[words.length - 1];
-        Assert.assertEquals(lastWord, "Verified");
+        settingsPage setPage = homePage.clickSettingButton();
+        Assert.assertEquals(setPage.getEmailVerificationStatus(), "Verified");
     }
 
     @Test
@@ -171,27 +138,25 @@ public class recoverAccountTests extends Base{
 
         logger.info("Open the app without a registered user");
         logger.info("Press 'Recover Account', should be directed to recover account page");
-        homePage.recoverAccountButton.click();
+        recoverAccountPage recoverAccPage =  homePage.clickRecoverAccountButton();
 
         logger.info("Leave email field empty");
         logger.info("Press 'Recover Account', should get message saying 'Enter Valid Email'" +
                     "and another message saying 'Please enter an email.'");
-        recoverAccountPage.recoverAccountButton.click();
-        Assert.assertTrue(recoverAccountPage.emailFieldErrorMessage.isDisplayed());
-        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+        recoverAccPage.clickRecoverAccountButton();
+        Assert.assertTrue(recoverAccPage.isEmailFieldErrorMessageDisplayed());
+        Assert.assertEquals(recoverAccPage.getGeneralErrorMessage(),
                     "Please enter an email.");
 
         logger.info("Enter invalid email");
-        recoverAccountPage.emailField.click();
-        Actions a = new Actions(appDriver);
-        a.sendKeys(randString());
-        a.perform();
+        recoverAccPage.enterEmail(randString());
+
 
         logger.info("Press 'Recover Account', should get message saying 'Enter Valid Email'" +
                     "and another message saying 'Please enter an email.'");
-        recoverAccountPage.recoverAccountButton.click();
-        Assert.assertTrue(recoverAccountPage.emailFieldErrorMessage.isDisplayed());
-        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+        recoverAccPage.clickRecoverAccountButton();
+        Assert.assertTrue(recoverAccPage.isEmailFieldErrorMessageDisplayed());
+        Assert.assertEquals(recoverAccPage.getGeneralErrorMessage(),
                     "Please enter an email.");
 
     }
@@ -202,46 +167,44 @@ public class recoverAccountTests extends Base{
 
         logger.info("Open the app without a registered user");
         logger.info("Press 'Recover Account', should be directed to recover account page");
-        homePage.recoverAccountButton.click();
+        recoverAccountPage recoverAccPage =  homePage.clickRecoverAccountButton();
 
         logger.info("Enter a valid email");
-        recoverAccountPage.emailField.click();
-        Actions a = new Actions(appDriver);
-        a.sendKeys((String) config.get("email"));
-        a.perform();
+        recoverAccPage.enterEmail((String) config.get("email"));
+
 
         logger.info("Leave phrase field empty");
         logger.info("Press 'Recover Account', should get message saying 'Seed phrase is too short'" +
                     "and another message saying 'Enter your Seedphrase'");
-        recoverAccountPage.recoverAccountButton.click();
-        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+        recoverAccPage.clickRecoverAccountButton();
+        Assert.assertEquals(recoverAccPage.getGeneralErrorMessage(),
                     "Seed phrase is too short");
-        Assert.assertTrue(recoverAccountPage.phraseFieldErrorMessage.isDisplayed());
+        Assert.assertTrue(recoverAccPage.isPhraseFieldErrorMessage());
 
 
         logger.info("Copy, then paste short phrase");
-        copyPastePhrase(generateStringOfWords(2));
+        recoverAccPage.copyPastePhrase(generateStringOfWords(2));
         logger.info("Press 'Recover Account', should get message saying 'Seed phrase is too short'");
-        recoverAccountPage.recoverAccountButton.click();
-        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
-                "Seed phrase is too short");
+        recoverAccPage.clickRecoverAccountButton();
+        Assert.assertEquals(recoverAccPage.getGeneralErrorMessage(),
+                    "Seed phrase is too short");
 
         logger.info("Copy, then paste wrong phrase with 24 words");
-        copyPastePhrase(" " + generateStringOfWords(22));
+        recoverAccPage.copyPastePhrase(" " + generateStringOfWords(22));
 
         logger.info("Press 'Recover Account', should get message saying 'Invalid mnemonic'");
         appDriver.hideKeyboard();
-        recoverAccountPage.recoverAccountButton.click();
-        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
-                "Invalid mnemonic");
+        recoverAccPage.clickRecoverAccountButton();
+        Assert.assertEquals(recoverAccPage.getGeneralErrorMessage(),
+                    "Invalid mnemonic");
 
         logger.info("Copy, then paste long phrase");
-        copyPastePhrase(" " + generateStringOfWords(10));
+        recoverAccPage.copyPastePhrase(" " + generateStringOfWords(10));
 
         logger.info("Press 'Recover Account', should get message saying 'Seed phrase is too long'");
         appDriver.hideKeyboard();
-        recoverAccountPage.recoverAccountButton.click();
-        Assert.assertEquals(recoverAccountPage.generalErrorMessage.getText(),
+        recoverAccPage.clickRecoverAccountButton();
+        Assert.assertEquals(recoverAccPage.getGeneralErrorMessage(),
                     "Seed phrase is too long");
 
 

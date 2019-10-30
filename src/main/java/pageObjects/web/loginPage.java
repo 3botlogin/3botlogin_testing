@@ -1,5 +1,6 @@
 package pageObjects.web;
 
+import appmain.Base;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +10,7 @@ import io.appium.java_client.MobileElement;
 
 public class loginPage {
 
+
     public loginPage(AppiumDriver<MobileElement> driver)
     {
         PageFactory.initElements(driver, this);
@@ -16,37 +18,57 @@ public class loginPage {
     }
 
     @FindBy(xpath = "//*[@id=\"topbar-first\"]/div/div[2]/a")
-    public WebElement signInButton;
+    private WebElement signInButton;
 
     @FindBy(xpath = "//a[@href='/user/auth/external?authclient=3bot']")
-    public WebElement _3botLoginOption;
+    private WebElement _3botLoginOption;
 
     @FindBy(xpath = "//div[@class=\"v-text-field__slot\"]/input")
-    public WebElement nameField;
+    private WebElement nameField;
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[4]/main/div/div/section/div[1]/div/div/div/div[2]/div[1]/div/form/div[2]/div/div[1]/div/input")
-    public WebElement emailField;
+    private WebElement emailField;
 
     //sign in and register are the same element .. same xpath
     @FindBy(xpath = "//*[@id=\"app\"]/div[2]/main/div/div/section/div[1]/div/div/form/div[2]/button")
-    public WebElement _3botSignInButton;
+    private WebElement _3botSignInButton;
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[2]/main/div/div/section/div[1]/div/div/form/div[2]/button")
-    public WebElement _3botRegisterButton;
+    private WebElement _3botRegisterButton;
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[4]/main/div/div/section/div[1]/div/div/div/div[2]/div[1]/div/form/div[4]/button")
-    public WebElement continueButton;
+    private WebElement continueButton;
 
     @FindBy(xpath = "//*[@id=\"app\"]/div[4]/main/div/div/section/div[1]/div/div/div/div[2]/div[2]/div/div[3]/div/div[1]/div/input")
-    public WebElement phraseSwitch;
+    private WebElement phraseSwitch;
 
 
     @FindBy(xpath = "//a[@id='space-menu']")
-    public WebElement mySpacesMenu;
+    private WebElement mySpacesMenu;
 
     //when validating email
     @FindBy(xpath = "//*[@class='subheading pt-3']")
     public WebElement emailValidatedText;
+
+    public void clickSignInButton(){
+        signInButton.click();
+    }
+
+    public void clickthreebotLoginOption(){
+        _3botLoginOption.click();
+    }
+
+    public void enter3botName(String name){
+        nameField.sendKeys(name);
+    }
+
+    public void click3botSignInButton(){
+        Base.waitAndClick(_3botSignInButton);
+    }
+
+    public Boolean checkIfMySpaceMenuDisplayed(){
+        return mySpacesMenu.isDisplayed();
+    }
 
 
 }
