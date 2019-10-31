@@ -15,12 +15,12 @@ import org.testng.annotations.*;
 
 
 public class signInTests extends Base{
-    AppiumDriver<MobileElement> appDriver;
-    AppiumDriver<MobileElement> webDriver;
-    PinCodePage pinCodePage;
-    LoginPage loginPage;
-    HomePage homePage;
-    TestsUtils testsUtils;
+    private AppiumDriver<MobileElement> appDriver;
+    private AppiumDriver<MobileElement> webDriver;
+    private HomePage homePage;
+    private PinCodePage pinCodePage;
+    private LoginPage loginPage;
+    private TestsUtils testsUtils;
 
 
     @BeforeClass
@@ -40,17 +40,16 @@ public class signInTests extends Base{
 
 	@BeforeMethod
 	public void setUp(Method method) throws IOException {
-
 		logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.TRUE);
-        pinCodePage = new PinCodePage(appDriver);
         homePage = new HomePage(appDriver);
+        pinCodePage = new PinCodePage(appDriver);
+
     }
 	
 	@AfterMethod
 	public void tearDown(Method method) {
-
         logger.info("End of Test : " + method.getName());
         appiumService.stop();
     }
@@ -98,10 +97,7 @@ public class signInTests extends Base{
         signInThroughWebCommonSteps();
 
         logger.info("Provide wrong pin code and press OK, Sign in should fail");
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
 
         logger.info("Make sure you are still in pin code page");
         Assert.assertEquals(pinCodePage.getLoginText(), "Login");

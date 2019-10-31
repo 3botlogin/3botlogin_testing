@@ -20,13 +20,13 @@ import utils.TestsUtils;
 
 public class recoverAccountTests extends Base{
 
-    AppiumDriver<MobileElement> appDriver;
-    AppiumDriver<MobileElement> webDriver;
-    HomePage homePage;
-    LoginPage loginPage;
-    TestsUtils testsUtils;
-    Email gmail;
-    String email;
+    private AppiumDriver<MobileElement> appDriver;
+    private AppiumDriver<MobileElement> webDriver;
+    private HomePage homePage;
+    private LoginPage loginPage;
+    private TestsUtils testsUtils;
+    private Email gmail;
+    private String email;
 
     @BeforeClass
     public void recoverAccountClassSetup() throws Exception {

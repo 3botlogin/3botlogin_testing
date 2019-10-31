@@ -11,66 +11,61 @@ import pageObjects.app.RegisterPage;
 import pageObjects.web.LoginPage;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import java.io.IOException;
 
 
 public class TestsUtils extends Base {
 
-    AppiumDriver<MobileElement> appDriver;
-    AppiumDriver<MobileElement> webDriver;
-    LoginPage loginPage;
-    PinCodePage pinCodePage;
-    HomePage homePage;
-    RegisterPage registerPage;
-    RecoverAccountPage recoverAccountPage;
-    Email gmail;
-    private String userName = randString();
+    private AppiumDriver<MobileElement> appDriver;
+    private AppiumDriver<MobileElement> webDriver;
+    private LoginPage loginPage;
+    private HomePage homePage;
+    private RecoverAccountPage recoverAccountPage;
+    private Email gmail;
+    private String userName;
     private String phrase;
 
     public TestsUtils(AppiumDriver<MobileElement> appDriver) throws MessagingException {
         this.appDriver = appDriver;
+        this.userName = randString();
         gmail = new Email((String) config.get("email"), (String) config.get("email_password"),
                     "smtp.gmail.com", Email.EmailFolder.INBOX);
-        pinCodePage = new PinCodePage(appDriver);
         homePage = new HomePage(appDriver);
         recoverAccountPage = new RecoverAccountPage(appDriver);
-        registerPage = new RegisterPage(appDriver);
     }
 
-    public void registeringUSerCommonSteps() throws MessagingException, IOException {
+    public void registeringUSerCommonSteps() throws MessagingException {
 
         logger.info("open the app and press register now");
-        RegisterPage regPage =  homePage.clickRegisterNowButton();
+        RegisterPage registerPage =  homePage.clickRegisterNowButton();
 
         logger.info("Provide random 3bot name then press continue, should succeed");
-        regPage.enterUserName(userName);
+        registerPage.enterUserName(userName);
         // 'registerPage.doubleNameField.sendKeys(randUser)'not working.have to use actions
-        regPage.clickContinueButton();
+        registerPage.clickContinueButton();
 
         logger.info("Provide email then press continue, should succeed");
-        regPage.clickEmailField();
-        regPage.enterEmail((String) config.get("email"));
-        regPage.clickContinueButton();
+        registerPage.clickEmailField();
+        registerPage.enterEmail((String) config.get("email"));
+        registerPage.clickContinueButton();
 
         logger.info("Copy phrase, then click continue");
-        phrase = regPage.getPhrase();
-        regPage.clickContinueButton();
+        phrase = registerPage.getPhrase();
+        registerPage.clickContinueButton();
 
         logger.info("At the Finishing page, press continue ");
-        regPage.clickContinueButton();
+        PinCodePage pinCodePage = registerPage.clickContinueButton();
 
         logger.info("Check number of messages in the gmail");
         int emails_num = gmail.getNumberOfMessages();
 
-        pinCodePage.enterRightPinCode();
-        pinCodePage.confirmRightPin();
+        pinCodePage.enterPinCode("1234");
+        pinCodePage.confirmPinCode("1234");
 
         logger.info("Wait for the email to be received within 30 seconds");
         Boolean email_received = gmail.waitForNewMessage(emails_num);
         Assert.assertTrue(email_received, "Verification mail hasn't been received");
 
     }
-
 
     public void verifyEmail() throws Exception {
         logger.info("Open the email and click the verification link, email should be verified");

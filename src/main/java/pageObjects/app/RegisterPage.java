@@ -41,8 +41,9 @@ public class RegisterPage {
         enterString(email);
     }
 
-    public void clickContinueButton(){
+    public PinCodePage clickContinueButton(){
         continueButton.click();
+        return new PinCodePage(driver);
     }
 
     public void clickEmailField(){

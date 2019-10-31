@@ -5,25 +5,21 @@ import org.testng.Assert;
 import java.io.IOException;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import pageObjects.web.LoginPage;
 import pageObjects.app.HomePage;
 import pageObjects.app.SettingsPage;
 import java.lang.reflect.Method;
 import utils.Email;
 import utils.TestsUtils;
-
-import javax.mail.Message;
 import javax.mail.MessagingException;
 
 
 public class registerTests extends Base{
-    AppiumDriver<MobileElement> appDriver;
-    AppiumDriver<MobileElement> webDriver;
-    LoginPage loginPage;
-    HomePage homePage;
-    TestsUtils testsUtils;
-    Email gmail;
-    String email;
+    private AppiumDriver<MobileElement> appDriver;
+    private AppiumDriver<MobileElement> webDriver;
+    private HomePage homePage;
+    private TestsUtils testsUtils;
+    private Email gmail;
+    private String email;
 
 
     @BeforeClass
@@ -36,7 +32,6 @@ public class registerTests extends Base{
 
     @BeforeMethod
     public void setUp(Method method) throws IOException, MessagingException {
-
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
@@ -53,22 +48,11 @@ public class registerTests extends Base{
 
     @AfterClass
     public void registerTestsClassTeardown() throws IOException {
-        //saveconfig to make sure it
+        //saveconfig
         logger.info("Register Class tearDown");
         config.setProperty("registeredUser", "");
         config.setProperty("accountPhrase", "");
         saveConfig();
-    }
-
-    public void verifyEmail() throws Exception {
-
-        logger.info("Open the email and click the verification link, email should be verified");
-        Message lastEmailMessage = gmail.getLatestMessage();
-        String verificationLink = gmail.getURl(gmail.getMessageContent(lastEmailMessage));
-        webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
-        loginPage = new LoginPage(webDriver);
-        webDriver.get(verificationLink);
-        waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
     }
 
     @Test
@@ -77,7 +61,7 @@ public class registerTests extends Base{
 
         testsUtils.registeringUSerCommonSteps();
 
-        verifyEmail();
+        testsUtils.verifyEmail();
 
         logger.info("Switch to the app and make sure the email is verified");
         switchToApp(appDriver);
@@ -111,7 +95,7 @@ public class registerTests extends Base{
         Boolean email_received = gmail.waitForNewMessage(emails_num);
         Assert.assertTrue(email_received, "Verification mail hasn't been received");
 
-        verifyEmail();
+        testsUtils.verifyEmail();
 
     }
 

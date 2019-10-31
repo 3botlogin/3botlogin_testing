@@ -14,9 +14,9 @@ import java.lang.reflect.Method;
 
 public class settingsTests extends Base{
 
-    AppiumDriver<MobileElement> appDriver;
-    HomePage homePage;
-    TestsUtils testsUtils;
+    private AppiumDriver<MobileElement> appDriver;
+    private HomePage homePage;
+    private TestsUtils testsUtils;
 
 
     @BeforeClass
@@ -48,7 +48,6 @@ public class settingsTests extends Base{
 
     @AfterMethod
     public void tearDown(Method method) {
-
         logger.info("End of Test : " + method.getName());
         appiumService.stop();
     }
