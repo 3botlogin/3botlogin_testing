@@ -84,7 +84,7 @@ public class PinCodePage {
 
         String [] numbers = pinCode.split("");
         for (String num : numbers){
-            clickNumber("num");
+            clickNumber(num);
         }
         return clickOkButton();
     }
