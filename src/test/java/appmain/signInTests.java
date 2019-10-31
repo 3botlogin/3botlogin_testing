@@ -81,7 +81,7 @@ public class signInTests extends Base{
         signInThroughWebCommonSteps();
 
         logger.info("Provide username correct pin code and press OK, should succeed");
-        ResourceAccessPage resAccessPage = pinCodePage.enterRightPinCode();
+        ResourceAccessPage resAccessPage = pinCodePage.enterPinCode("1234");
 
         logger.info("Press Accept for the website to access the app , should succeed");
         resAccessPage.clickAccept();

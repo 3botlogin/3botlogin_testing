@@ -65,48 +65,33 @@ public class settingsTests extends Base{
         Assert.assertTrue(pinCodePage.checkEnterOldPinTextDisplayed());
 
         logger.info("Enter wrong old pin code, should still see message saying 'Enter old pincode'");
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
         Assert.assertTrue(pinCodePage.checkEnterOldPinTextDisplayed());
 
         logger.info("Enter correct old pin code, should succeed");
-        pinCodePage.enterRightPinCode();
+        pinCodePage.enterPinCode("1234");
         Assert.assertTrue(pinCodePage.checkEnterNewPinTextDisplayed());
 
         logger.info("Enter new pincode, should succeed");
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
         Assert.assertTrue(pinCodePage.checkConfirmNewPinTextDisplayed());
 
         logger.info("Confirm new pincode by entering a wrong pincode. should fail");
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("1");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("1111");
         Assert.assertTrue(pinCodePage.checkConfirmNewPinTextDisplayed());
 
         logger.info("Confirm new pincode, should succeed");
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
         Assert.assertTrue(pinCodePage.checkPinChangedSuccessfullyTextDisplayed());
 
         logger.info("Make sure pincode has actually changed by using the " +
                     "new pin, should succeed");
         appDriver.navigate().back();
         settingPage.clickChangePinCode();
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
         Assert.assertTrue(pinCodePage.checkEnterNewPinTextDisplayed());
-        pinCodePage.enterRightPinCode();
-        pinCodePage.confirmRightPin();
+        pinCodePage.enterPinCode("1234");
+        pinCodePage.confirmPinCode("1234");
 
     }
 
@@ -137,23 +122,20 @@ public class settingsTests extends Base{
         logger.info("Disable Fingerprint with providing wrong pin, " +
                     "Fingerprint should be still enabled");
         PinCodePage pinCodePage =  settingPage.disableFingerPrintCheckbox();
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
         Assert.assertEquals(settingPage.isFingerPrintBoxChecked(), "true");
 
         logger.info("Disable Fingerprint with providing correct pin, " +
                     "then press cancel, Fingerprint should be still enabled");
         settingPage.disableFingerPrintCheckbox();
-        pinCodePage.enterRightPinCode();
+        pinCodePage.enterPinCode("1234");
         settingPage.clickCancelButton();
         Assert.assertEquals(settingPage.isFingerPrintBoxChecked(), "true");
 
         logger.info("Disable Fingerprint with providing correct pin, " +
                     "then press yes, Fingerprint should disabled");
         settingPage.disableFingerPrintCheckbox();
-        pinCodePage.enterRightPinCode();
+        pinCodePage.enterPinCode("1234");
         settingPage.clickYesButton();
         Assert.assertEquals(settingPage.isFingerPrintBoxChecked(),"false");
 
@@ -175,15 +157,12 @@ public class settingsTests extends Base{
 
         logger.info("Press 'Show Phrase' and provide wrong pin code, shouldn't show phrase");
         PinCodePage pinCodePage = settingPage.clickShowPhrase();
-        for (int i=0; i<4; i++) {
-            pinCodePage.clickNumber("8");
-        }
-        pinCodePage.clickOkButton();
+        pinCodePage.enterPinCode("8888");
         Assert.assertTrue(settingPage.isShowPhraseDisplayed());
 
         logger.info("Press 'Show Phrase' and provide right pin code, phrase should be shown");
         settingPage.clickShowPhrase();
-        pinCodePage.enterRightPinCode();
+        pinCodePage.enterPinCode("1234");
         Assert.assertEquals(settingPage.getPhrase(), (String) config.get("accountPhrase"));
 
         logger.info("Press 'Close' Button, should get back to settings page");

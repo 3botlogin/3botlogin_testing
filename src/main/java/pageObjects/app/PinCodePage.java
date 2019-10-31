@@ -70,17 +70,27 @@ public class PinCodePage {
         return confirmNewPinText.isDisplayed();
     }
 
-    public ResourceAccessPage enterRightPinCode(){
+    public ResourceAccessPage enterPinCode(String pinCode){
 
-        clickNumber("1");
-        clickNumber("2");
-        clickNumber("3");
-        clickNumber("4");
+        try {
+            Integer.parseInt(pinCode);
+        }
+        catch (Exception e){
+            throw new NumberFormatException("pin code need to be an integer of 4 numbers");
+        }
+        if (pinCode.length() != 4){
+            throw new NumberFormatException("pin code need to be exactly 4 numbers");
+        }
+
+        String [] numbers = pinCode.split("");
+        for (String num : numbers){
+            clickNumber("num");
+        }
         return clickOkButton();
     }
 
-    public void confirmRightPin(){
+    public void confirmPinCode(String pinCode){
 
-        enterRightPinCode();
+        enterPinCode(pinCode);
     }
 }

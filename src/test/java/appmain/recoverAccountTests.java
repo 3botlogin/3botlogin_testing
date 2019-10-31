@@ -2,10 +2,6 @@ package appmain;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-
-import static io.appium.java_client.touch.offset.ElementOption.element;
-import static java.time.Duration.ofSeconds;
-
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.*;
@@ -101,8 +97,8 @@ public class recoverAccountTests extends Base{
 
         logger.info("Enter the pin and confirm it, should succeed");
         int emails_num = gmail.getNumberOfMessages();
-        pinCodePage.enterRightPinCode();
-        pinCodePage.confirmRightPin();
+        pinCodePage.enterPinCode("1234");;
+        pinCodePage.confirmPinCode("1234");
 
         logger.info("Wait for the email to be received within 30 seconds");
         Boolean email_received = gmail.waitForNewMessage(emails_num);
