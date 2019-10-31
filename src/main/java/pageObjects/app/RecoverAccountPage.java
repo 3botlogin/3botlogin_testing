@@ -16,11 +16,11 @@ import static io.appium.java_client.touch.offset.ElementOption.element;
 import static java.time.Duration.ofSeconds;
 
 
-public class recoverAccountPage {
+public class RecoverAccountPage {
 
     private AppiumDriver<MobileElement> driver;
 
-    public recoverAccountPage(AppiumDriver<MobileElement> driver) {
+    public RecoverAccountPage(AppiumDriver<MobileElement> driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
@@ -95,9 +95,9 @@ public class recoverAccountPage {
         return phraseFieldErrorMessage.isDisplayed();
     }
 
-    public pinCodePage clickRecoverAccountButton(){
+    public PinCodePage clickRecoverAccountButton(){
         recoverAccountButton.click();
-        return new pinCodePage(driver);
+        return new PinCodePage(driver);
     }
 
     public String getGeneralErrorMessage(){

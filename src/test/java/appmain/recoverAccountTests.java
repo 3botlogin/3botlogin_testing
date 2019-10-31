@@ -2,36 +2,33 @@ package appmain;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.TouchAction;
-import io.appium.java_client.android.Activity;
-import io.appium.java_client.android.AndroidDriver;
-import static io.appium.java_client.touch.LongPressOptions.longPressOptions;
+
 import static io.appium.java_client.touch.offset.ElementOption.element;
 import static java.time.Duration.ofSeconds;
-import org.openqa.selenium.interactions.Actions;
+
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.*;
-import pageObjects.app.settingsPage;
-import pageObjects.web.loginPage;
+import pageObjects.app.SettingsPage;
+import pageObjects.web.LoginPage;
 import utils.Email;
-import pageObjects.app.pinCodePage;
-import pageObjects.app.recoverAccountPage;
-import pageObjects.app.homePage;
+import pageObjects.app.PinCodePage;
+import pageObjects.app.RecoverAccountPage;
+import pageObjects.app.HomePage;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import utils.testsUtils;
+import utils.TestsUtils;
 
 
 public class recoverAccountTests extends Base{
 
     AppiumDriver<MobileElement> appDriver;
     AppiumDriver<MobileElement> webDriver;
-    homePage homePage;
-    loginPage loginPage;
-    testsUtils testsUtils;
+    HomePage homePage;
+    LoginPage loginPage;
+    TestsUtils testsUtils;
     Email gmail;
     String email;
 
@@ -45,7 +42,7 @@ public class recoverAccountTests extends Base{
             // register only if there is no registeredUSer in the file to recover the account with
             appiumService = startServer();
             appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
-            testsUtils = new testsUtils(appDriver);
+            testsUtils = new TestsUtils(appDriver);
             testsUtils.registeringUSerCommonSteps();
             testsUtils.verifyEmail();
             //saveconfig
@@ -61,8 +58,8 @@ public class recoverAccountTests extends Base{
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
-        homePage = new homePage(appDriver);
-        testsUtils = new testsUtils(appDriver);
+        homePage = new HomePage(appDriver);
+        testsUtils = new TestsUtils(appDriver);
 
     }
 
@@ -87,7 +84,7 @@ public class recoverAccountTests extends Base{
 
         logger.info("Open the app without a registered user");
         logger.info("Press 'Recover Account', should be directed to recover account page");
-        recoverAccountPage recoverAccPage = homePage.clickRecoverAccountButton();
+        RecoverAccountPage recoverAccPage = homePage.clickRecoverAccountButton();
 
         // In the future 3botname shouldn't be required
         logger.info("Enter a valid 3botName");
@@ -100,12 +97,12 @@ public class recoverAccountTests extends Base{
         recoverAccPage.copyPastePhrase((String) config.get("accountPhrase"));
 
         logger.info("Press 'Recover Account', should be redirected to pin page");
-        pinCodePage pinPage = recoverAccPage.clickRecoverAccountButton();
+        PinCodePage pinCodePage = recoverAccPage.clickRecoverAccountButton();
 
         logger.info("Enter the pin and confirm it, should succeed");
         int emails_num = gmail.getNumberOfMessages();
-        pinPage.enterRightPinCode();
-        pinPage.confirmRightPin();
+        pinCodePage.enterRightPinCode();
+        pinCodePage.confirmRightPin();
 
         logger.info("Wait for the email to be received within 30 seconds");
         Boolean email_received = gmail.waitForNewMessage(emails_num);
@@ -115,7 +112,7 @@ public class recoverAccountTests extends Base{
         Message lastEmailMessage = gmail.getLatestMessage();
         String verificationLink = gmail.getURl(gmail.getMessageContent(lastEmailMessage));
         webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
-        loginPage = new loginPage(webDriver);
+        loginPage = new LoginPage(webDriver);
         webDriver.get(verificationLink);
         waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
 
@@ -123,8 +120,8 @@ public class recoverAccountTests extends Base{
         switchToApp(appDriver);
         homePage.clickSettingButton();
         appDriver.navigate().back();
-        settingsPage setPage = homePage.clickSettingButton();
-        Assert.assertEquals(setPage.getEmailVerificationStatus(), "Verified");
+        SettingsPage settingPage = homePage.clickSettingButton();
+        Assert.assertEquals(settingPage.getEmailVerificationStatus(), "Verified");
     }
 
     @Test
@@ -138,7 +135,7 @@ public class recoverAccountTests extends Base{
 
         logger.info("Open the app without a registered user");
         logger.info("Press 'Recover Account', should be directed to recover account page");
-        recoverAccountPage recoverAccPage =  homePage.clickRecoverAccountButton();
+        RecoverAccountPage recoverAccPage =  homePage.clickRecoverAccountButton();
 
         logger.info("Leave email field empty");
         logger.info("Press 'Recover Account', should get message saying 'Enter Valid Email'" +
@@ -167,7 +164,7 @@ public class recoverAccountTests extends Base{
 
         logger.info("Open the app without a registered user");
         logger.info("Press 'Recover Account', should be directed to recover account page");
-        recoverAccountPage recoverAccPage =  homePage.clickRecoverAccountButton();
+        RecoverAccountPage recoverAccPage =  homePage.clickRecoverAccountButton();
 
         logger.info("Enter a valid email");
         recoverAccPage.enterEmail((String) config.get("email"));

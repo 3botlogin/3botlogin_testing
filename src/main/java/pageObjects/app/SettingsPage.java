@@ -6,16 +6,15 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 
 import java.util.List;
 
 
-public class settingsPage {
+public class SettingsPage {
 
     private AppiumDriver<MobileElement> driver;
 
-    public settingsPage(AppiumDriver<MobileElement> driver) {
+    public SettingsPage(AppiumDriver<MobileElement> driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
@@ -97,9 +96,9 @@ public class settingsPage {
         OkButton.click();
     }
 
-    public pinCodePage clickChangePinCode(){
+    public PinCodePage clickChangePinCode(){
         changePinCode.click();
-        return new pinCodePage(driver);
+        return new PinCodePage(driver);
     }
 
     public Boolean isChangePinCodeDisplayed(){
@@ -110,9 +109,9 @@ public class settingsPage {
         fingerPrintCheckbox.click();
     }
 
-    public pinCodePage disableFingerPrintCheckbox(){
+    public PinCodePage disableFingerPrintCheckbox(){
         fingerPrintCheckbox.click();
-        return new pinCodePage(driver);
+        return new PinCodePage(driver);
     }
 
     public void clickCancelButton(){
@@ -127,9 +126,9 @@ public class settingsPage {
         return fingerPrintCheckbox.getAttribute("checked");
     }
 
-    public pinCodePage clickShowPhrase(){
+    public PinCodePage clickShowPhrase(){
         showPhrase.click();
-        return new pinCodePage(driver);
+        return new PinCodePage(driver);
     }
 
     public Boolean isShowPhraseDisplayed(){

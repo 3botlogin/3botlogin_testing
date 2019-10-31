@@ -8,10 +8,10 @@ import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.MobileElement;
 
 
-public class loginPage {
+public class LoginPage {
 
 
-    public loginPage(AppiumDriver<MobileElement> driver)
+    public LoginPage(AppiumDriver<MobileElement> driver)
     {
         PageFactory.initElements(driver, this);
         // Also if you wrapped the driver with AppiumFieldDecorator, it will work

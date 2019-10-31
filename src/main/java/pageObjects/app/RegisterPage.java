@@ -9,11 +9,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 
-public class registerPage {
+public class RegisterPage {
 
     private AppiumDriver<MobileElement> driver;
 
-    public registerPage(AppiumDriver<MobileElement> driver) {
+    public RegisterPage(AppiumDriver<MobileElement> driver) {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }

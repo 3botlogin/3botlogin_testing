@@ -7,9 +7,9 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
-public class resourceAccessPage {
+public class ResourceAccessPage {
 
-    public resourceAccessPage(AppiumDriver<MobileElement> driver)
+    public ResourceAccessPage(AppiumDriver<MobileElement> driver)
     {
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }

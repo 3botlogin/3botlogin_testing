@@ -4,43 +4,43 @@ import appmain.Base;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.testng.Assert;
-import pageObjects.app.homePage;
-import pageObjects.app.pinCodePage;
-import pageObjects.app.recoverAccountPage;
-import pageObjects.app.registerPage;
-import pageObjects.web.loginPage;
+import pageObjects.app.HomePage;
+import pageObjects.app.PinCodePage;
+import pageObjects.app.RecoverAccountPage;
+import pageObjects.app.RegisterPage;
+import pageObjects.web.LoginPage;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
 
 
-public class testsUtils extends Base {
+public class TestsUtils extends Base {
 
     AppiumDriver<MobileElement> appDriver;
     AppiumDriver<MobileElement> webDriver;
-    loginPage loginPage;
-    pinCodePage pinCodePage;
-    homePage homePage;
-    registerPage registerPage;
-    recoverAccountPage recoverAccountPage;
+    LoginPage loginPage;
+    PinCodePage pinCodePage;
+    HomePage homePage;
+    RegisterPage registerPage;
+    RecoverAccountPage recoverAccountPage;
     Email gmail;
     private String userName = randString();
     private String phrase;
 
-    public testsUtils(AppiumDriver<MobileElement> appDriver) throws MessagingException {
+    public TestsUtils(AppiumDriver<MobileElement> appDriver) throws MessagingException {
         this.appDriver = appDriver;
         gmail = new Email((String) config.get("email"), (String) config.get("email_password"),
                     "smtp.gmail.com", Email.EmailFolder.INBOX);
-        pinCodePage = new pinCodePage(appDriver);
-        homePage = new homePage(appDriver);
-        recoverAccountPage = new recoverAccountPage(appDriver);
-        registerPage = new registerPage(appDriver);
+        pinCodePage = new PinCodePage(appDriver);
+        homePage = new HomePage(appDriver);
+        recoverAccountPage = new RecoverAccountPage(appDriver);
+        registerPage = new RegisterPage(appDriver);
     }
 
     public void registeringUSerCommonSteps() throws MessagingException, IOException {
 
         logger.info("open the app and press register now");
-        registerPage regPage =  homePage.clickRegisterNowButton();
+        RegisterPage regPage =  homePage.clickRegisterNowButton();
 
         logger.info("Provide random 3bot name then press continue, should succeed");
         regPage.enterUserName(userName);
@@ -77,7 +77,7 @@ public class testsUtils extends Base {
         Message lastEmailMessage = gmail.getLatestMessage();
         String verificationLink = gmail.getURl(gmail.getMessageContent(lastEmailMessage));
         webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
-        loginPage = new loginPage(webDriver);
+        loginPage = new LoginPage(webDriver);
         webDriver.get(verificationLink);
         waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
     }

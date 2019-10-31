@@ -8,11 +8,11 @@ import org.openqa.selenium.support.PageFactory;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
-public class pinCodePage {
+public class PinCodePage {
 
     private AppiumDriver<MobileElement> driver;
 
-    public pinCodePage(AppiumDriver<MobileElement> driver)
+    public PinCodePage(AppiumDriver<MobileElement> driver)
     {
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
@@ -44,9 +44,9 @@ public class pinCodePage {
     }
 
 
-    public resourceAccessPage clickOkButton(){
+    public ResourceAccessPage clickOkButton(){
         OKButton.click();
-        return new resourceAccessPage(driver);
+        return new ResourceAccessPage(driver);
 
     }
 
@@ -70,7 +70,7 @@ public class pinCodePage {
         return confirmNewPinText.isDisplayed();
     }
 
-    public resourceAccessPage enterRightPinCode(){
+    public ResourceAccessPage enterRightPinCode(){
 
         clickNumber("1");
         clickNumber("2");

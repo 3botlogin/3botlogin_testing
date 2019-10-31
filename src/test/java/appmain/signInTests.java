@@ -5,11 +5,11 @@ import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import java.io.IOException;
 import io.appium.java_client.MobileElement;
-import pageObjects.app.pinCodePage;
-import pageObjects.app.resourceAccessPage;
-import pageObjects.app.homePage;
-import pageObjects.web.loginPage;
-import utils.testsUtils;
+import pageObjects.app.PinCodePage;
+import pageObjects.app.ResourceAccessPage;
+import pageObjects.app.HomePage;
+import pageObjects.web.LoginPage;
+import utils.TestsUtils;
 import java.lang.reflect.Method;
 import org.testng.annotations.*;
 
@@ -17,10 +17,10 @@ import org.testng.annotations.*;
 public class signInTests extends Base{
     AppiumDriver<MobileElement> appDriver;
     AppiumDriver<MobileElement> webDriver;
-    pinCodePage pinCodePage;
-    loginPage loginPage;
-    homePage homePage;
-    testsUtils testsUtils;
+    PinCodePage pinCodePage;
+    LoginPage loginPage;
+    HomePage homePage;
+    TestsUtils testsUtils;
 
 
     @BeforeClass
@@ -28,7 +28,7 @@ public class signInTests extends Base{
         logger.info("Sign In Class Setup");
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
-        testsUtils = new testsUtils(appDriver);
+        testsUtils = new TestsUtils(appDriver);
         testsUtils.registeringUSerCommonSteps();
         testsUtils.verifyEmail();
         //saveconfig
@@ -44,8 +44,8 @@ public class signInTests extends Base{
 		logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.TRUE);
-        pinCodePage = new pinCodePage(appDriver);
-        homePage = new homePage(appDriver);
+        pinCodePage = new PinCodePage(appDriver);
+        homePage = new HomePage(appDriver);
     }
 	
 	@AfterMethod
@@ -60,7 +60,7 @@ public class signInTests extends Base{
         String website = (String) config.get("website");
         logger.info("Get Website: " + website);
         webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
-        loginPage = new loginPage(webDriver);
+        loginPage = new LoginPage(webDriver);
         webDriver.get(website);
 
         logger.info("Click Sign in/up button, should succeed");
@@ -81,7 +81,7 @@ public class signInTests extends Base{
         signInThroughWebCommonSteps();
 
         logger.info("Provide username correct pin code and press OK, should succeed");
-        resourceAccessPage resAccessPage = pinCodePage.enterRightPinCode();
+        ResourceAccessPage resAccessPage = pinCodePage.enterRightPinCode();
 
         logger.info("Press Accept for the website to access the app , should succeed");
         resAccessPage.clickAccept();

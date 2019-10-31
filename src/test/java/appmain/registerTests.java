@@ -5,12 +5,12 @@ import org.testng.Assert;
 import java.io.IOException;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import pageObjects.web.loginPage;
-import pageObjects.app.homePage;
-import pageObjects.app.settingsPage;
+import pageObjects.web.LoginPage;
+import pageObjects.app.HomePage;
+import pageObjects.app.SettingsPage;
 import java.lang.reflect.Method;
 import utils.Email;
-import utils.testsUtils;
+import utils.TestsUtils;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -19,9 +19,9 @@ import javax.mail.MessagingException;
 public class registerTests extends Base{
     AppiumDriver<MobileElement> appDriver;
     AppiumDriver<MobileElement> webDriver;
-    loginPage loginPage;
-    homePage homePage;
-    testsUtils testsUtils;
+    LoginPage loginPage;
+    HomePage homePage;
+    TestsUtils testsUtils;
     Email gmail;
     String email;
 
@@ -40,8 +40,8 @@ public class registerTests extends Base{
         logger.info("Running Test : " + method.getName());
         appiumService = startServer();
         appDriver = Capabilities(Boolean.TRUE, Boolean.FALSE);
-        homePage = new homePage(appDriver);
-        testsUtils = new testsUtils(appDriver);
+        homePage = new HomePage(appDriver);
+        testsUtils = new TestsUtils(appDriver);
 
     }
 
@@ -66,7 +66,7 @@ public class registerTests extends Base{
         Message lastEmailMessage = gmail.getLatestMessage();
         String verificationLink = gmail.getURl(gmail.getMessageContent(lastEmailMessage));
         webDriver = Capabilities(Boolean.FALSE, Boolean.TRUE);
-        loginPage = new loginPage(webDriver);
+        loginPage = new LoginPage(webDriver);
         webDriver.get(verificationLink);
         waitTillTextBePresent(loginPage.emailValidatedText, "Email validated");
     }
@@ -83,8 +83,8 @@ public class registerTests extends Base{
         switchToApp(appDriver);
         homePage.clickSettingButton();
         appDriver.navigate().back();
-        settingsPage setPage = homePage.clickSettingButton();
-        String verificationStatus = setPage.getEmailVerificationStatus();
+        SettingsPage settingPage = homePage.clickSettingButton();
+        String verificationStatus = settingPage.getEmailVerificationStatus();
         Assert.assertEquals(verificationStatus, "Verified");
 
     }
@@ -101,11 +101,11 @@ public class registerTests extends Base{
 
         logger.info("Go to app preferences and press resend verification email," +
                     " should get a message saying 'email has been resend'");
-        settingsPage setPage = homePage.clickSettingButton();
-        setPage.resendVerificationEmail();
-        Assert.assertTrue(setPage.checkEmailResentTextDisplayed(),
+        SettingsPage settingPage = homePage.clickSettingButton();
+        settingPage.resendVerificationEmail();
+        Assert.assertTrue(settingPage.checkEmailResentTextDisplayed(),
                   "Pop up message is not displayed");
-        setPage.clickOkButton();
+        settingPage.clickOkButton();
 
         logger.info("Check if you received another verification email, should be received");
         Boolean email_received = gmail.waitForNewMessage(emails_num);

@@ -5,15 +5,14 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class homePage {
+public class HomePage {
 
         private AppiumDriver<MobileElement> driver;
 
-        public homePage(AppiumDriver<MobileElement> driver) {
+        public HomePage(AppiumDriver<MobileElement> driver) {
             this.driver = driver;
             PageFactory.initElements(new AppiumFieldDecorator(driver), this);
         }
@@ -49,9 +48,9 @@ public class homePage {
         private WebElement permissionAllow;
 
 
-        public registerPage clickRegisterNowButton(){
+        public RegisterPage clickRegisterNowButton(){
                 registerNowButton.click();
-                return new registerPage(driver);
+                return new RegisterPage(driver);
         }
 
         public Boolean isRegisterNowButtonDisplayed(){
@@ -76,14 +75,14 @@ public class homePage {
                 return freeFlowWebView.isDisplayed();
         }
 
-        public settingsPage clickSettingButton(){
+        public SettingsPage clickSettingButton(){
                 settingsButton.click();
-                return new settingsPage(driver);
+                return new SettingsPage(driver);
         }
 
-        public recoverAccountPage clickRecoverAccountButton(){
+        public RecoverAccountPage clickRecoverAccountButton(){
                 recoverAccountButton.click();
-                return new recoverAccountPage(driver);
+                return new RecoverAccountPage(driver);
         }
 
 
